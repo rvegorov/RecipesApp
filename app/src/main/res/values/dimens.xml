@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="baseMargin">16dp</dimen>
+    <dimen name="halfMargin">8dp</dimen>
+    <dimen name="navButtonWidth">100dp</dimen>
+    <dimen name="navButtonsMargin">10dp</dimen>
+    <dimen name="navButtonIconSize">24dp</dimen>
+</resources>
