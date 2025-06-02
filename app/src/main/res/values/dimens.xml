@@ -3,6 +3,8 @@
     <dimen name="baseMargin">16dp</dimen>
     <dimen name="halfMargin">8dp</dimen>
     <dimen name="navButtonWidth">100dp</dimen>
-    <dimen name="navButtonsMargin">10dp</dimen>
+    <dimen name="navButtonsMargin">2dp</dimen>
     <dimen name="navButtonIconSize">24dp</dimen>
+    <dimen name="buttonsTextSize">14sp</dimen>
+    <dimen name="navButtonsRadius">8dp</dimen>
 </resources>

@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_background"
+    android:background="@color/main_background_color"
     tools:context=".MainActivity">
 
     <TextView
@@ -34,8 +34,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|center"
             android:layout_weight="1"
-            android:backgroundTint="@color/blue"
-            android:text="@string/nav_button_categories" />
+            android:layout_marginEnd="@dimen/navButtonsMargin"
+            android:backgroundTint="@color/blue_color"
+            android:text="@string/title_categories" />
 
         <com.google.android.material.button.MaterialButton
             style="@style/StyleNavButton"
@@ -44,10 +45,10 @@
             android:layout_gravity="center|center"
             android:layout_marginStart="@dimen/navButtonsMargin"
             android:layout_weight="1"
-            android:backgroundTint="@color/red"
-            android:text="@string/nav_button_favourites"
+            android:backgroundTint="@color/red_color"
+            android:text="@string/title_favourites"
             app:icon="@drawable/ic_heart_empty"
-            app:iconGravity="end"
+            app:iconGravity="textEnd"
             app:iconSize="@dimen/navButtonIconSize" />
     </LinearLayout>
 
