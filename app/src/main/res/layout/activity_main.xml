@@ -5,15 +5,51 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/main_background_color"
     tools:context=".MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/baseMargin"
+        android:layout_marginBottom="@dimen/halfMargin"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/StyleNavButton"
+            android:layout_width="@dimen/navButtonWidth"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center"
+            android:layout_weight="1"
+            android:layout_marginEnd="@dimen/navButtonsMargin"
+            android:backgroundTint="@color/blue_color"
+            android:text="@string/title_categories" />
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/StyleNavButton"
+            android:layout_width="@dimen/navButtonWidth"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|center"
+            android:layout_marginStart="@dimen/navButtonsMargin"
+            android:layout_weight="1"
+            android:backgroundTint="@color/red_color"
+            android:text="@string/title_favourites"
+            app:icon="@drawable/ic_heart_empty"
+            app:iconGravity="textEnd"
+            app:iconSize="@dimen/navButtonIconSize" />
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
