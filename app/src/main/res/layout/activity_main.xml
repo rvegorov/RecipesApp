@@ -8,14 +8,19 @@
     android:background="@color/main_background_color"
     tools:context=".MainActivity">
 
-    <TextView
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/mainContainer"
+
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/app_name"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="@dimen/halfMargin"
+        >
+
+    </androidx.fragment.app.FragmentContainerView>
 
     <LinearLayout
         android:id="@+id/view"
@@ -33,8 +38,8 @@
             android:layout_width="@dimen/navButtonWidth"
             android:layout_height="wrap_content"
             android:layout_gravity="center|center"
-            android:layout_weight="1"
             android:layout_marginEnd="@dimen/navButtonsMargin"
+            android:layout_weight="1"
             android:backgroundTint="@color/blue_color"
             android:text="@string/title_categories" />
 

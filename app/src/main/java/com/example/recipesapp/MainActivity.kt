@@ -19,5 +19,9 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+        val categoriesListFragment = CategoriesListFragment()
+        val categoriesListTransaction = supportFragmentManager.beginTransaction()
+        categoriesListTransaction.add(R.id.mainContainer, categoriesListFragment)
+        categoriesListTransaction.commit()
     }
 }

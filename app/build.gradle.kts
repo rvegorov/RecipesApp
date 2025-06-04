@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.example.recipesapp"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.example.recipesapp"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -48,4 +48,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    val fragment_version = "1.8.7"
+
+    // Java language implementation
+    implementation(libs.androidx.fragment)
+    // Kotlin
+    implementation("androidx.fragment:fragment-ktx:$fragment_version")
 }
