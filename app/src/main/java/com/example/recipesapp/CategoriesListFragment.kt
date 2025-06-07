@@ -8,19 +8,21 @@ import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
-    private var binding: FragmentListCategoriesBinding? = null
+    private var _binding: FragmentListCategoriesBinding? = null
+    private val binding
+        get() = _binding ?: throw IllegalStateException("Binding for FragmentListCategoriesBinding must not to be null")
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentListCategoriesBinding.inflate(layoutInflater)
-        return binding!!.root
+        _binding = FragmentListCategoriesBinding.inflate(layoutInflater)
+        return binding.root
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        binding = null
+        _binding = null
     }
 }
