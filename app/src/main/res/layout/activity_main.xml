@@ -32,6 +32,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/categoriesButton"
             style="@style/StyleNavButton"
             android:layout_width="@dimen/navButtonWidth"
             android:layout_height="wrap_content"
@@ -42,6 +43,7 @@
             android:text="@string/title_categories" />
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/favouritesButton"
             style="@style/StyleNavButton"
             android:layout_width="@dimen/navButtonWidth"
             android:layout_height="wrap_content"
