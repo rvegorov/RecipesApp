@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginBottom="@dimen/halfMargin"
-        app:layout_constraintBottom_toTopOf="@+id/view"
+        app:layout_constraintBottom_toTopOf="@+id/vNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -21,7 +21,7 @@
     </androidx.fragment.app.FragmentContainerView>
 
     <LinearLayout
-        android:id="@+id/view"
+        android:id="@+id/vNavigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="@dimen/baseMargin"
@@ -32,7 +32,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/categoriesButton"
+            android:id="@+id/btnCategories"
             style="@style/StyleNavButton"
             android:layout_width="@dimen/navButtonWidth"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
             android:text="@string/title_categories" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/favouritesButton"
+            android:id="@+id/btnFavourites"
             style="@style/StyleNavButton"
             android:layout_width="@dimen/navButtonWidth"
             android:layout_height="wrap_content"
