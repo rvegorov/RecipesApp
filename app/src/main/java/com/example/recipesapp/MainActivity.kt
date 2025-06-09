@@ -5,6 +5,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.fragment.app.commit
 import com.example.recipesapp.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -19,9 +20,25 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val categoriesListFragment = CategoriesListFragment()
-        val categoriesListTransaction = supportFragmentManager.beginTransaction()
-        categoriesListTransaction.add(R.id.mainContainer, categoriesListFragment)
-        categoriesListTransaction.commit()
+        val favoritesFragment = FavoritesFragment()
+        val mainContainerViewId = R.id.mainContainer
+
+        supportFragmentManager.commit { add(mainContainerViewId, categoriesListFragment) }
+
+        binding.btnCategories.setOnClickListener {
+            supportFragmentManager.commit {
+                replace(mainContainerViewId, categoriesListFragment)
+                setReorderingAllowed(true)
+            }
+        }
+
+        binding.btnFavourites.setOnClickListener {
+            supportFragmentManager.commit {
+                replace(mainContainerViewId, favoritesFragment)
+                setReorderingAllowed(true)
+            }
+        }
     }
 }
