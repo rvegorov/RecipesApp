@@ -20,18 +20,15 @@ class MainActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val categoriesListFragment = CategoriesListFragment()
         val favoritesFragment = FavoritesFragment()
         val mainContainerViewId = R.id.mainContainer
 
-        val categoryListTransaction = supportFragmentManager.beginTransaction()
-        categoryListTransaction.add(mainContainerViewId, categoriesListFragment)
-        categoryListTransaction.commit()
-
+        supportFragmentManager.commit { add(mainContainerViewId, categoriesListFragment) }
 
         val categoriesButton = binding.categoriesButton
         val favouritesButton = binding.favouritesButton
-
 
         categoriesButton.setOnClickListener {
             supportFragmentManager.commit { replace(mainContainerViewId, categoriesListFragment) }
