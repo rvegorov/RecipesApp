@@ -27,14 +27,14 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.commit { add(mainContainerViewId, categoriesListFragment) }
 
-        binding.categoriesButton.setOnClickListener {
+        binding.btnCategories.setOnClickListener {
             supportFragmentManager.commit {
                 replace(mainContainerViewId, categoriesListFragment)
                 setReorderingAllowed(true)
             }
         }
 
-        binding.categoriesButton.setOnClickListener {
+        binding.btnFavourites.setOnClickListener {
             supportFragmentManager.commit {
                 replace(mainContainerViewId, favoritesFragment)
                 setReorderingAllowed(true)
