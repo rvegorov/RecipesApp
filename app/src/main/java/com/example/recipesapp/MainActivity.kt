@@ -27,14 +27,11 @@ class MainActivity : AppCompatActivity() {
 
         supportFragmentManager.commit { add(mainContainerViewId, categoriesListFragment) }
 
-        val categoriesButton = binding.categoriesButton
-        val favouritesButton = binding.favouritesButton
-
-        categoriesButton.setOnClickListener {
+        binding.categoriesButton.setOnClickListener {
             supportFragmentManager.commit { replace(mainContainerViewId, categoriesListFragment) }
         }
 
-        favouritesButton.setOnClickListener {
+        binding.categoriesButton.setOnClickListener {
             supportFragmentManager.commit { replace(mainContainerViewId, favoritesFragment) }
         }
     }
