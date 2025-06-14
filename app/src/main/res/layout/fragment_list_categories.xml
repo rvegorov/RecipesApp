@@ -12,15 +12,20 @@
         android:layout_height="@dimen/fragmentHeaderHeight">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/ivCategoriesHeader"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/title_categories"
             android:scaleType="centerCrop"
-            android:src="@drawable/bcg_categories"
-            android:contentDescription="@string/title_categories"/>
+            android:src="@drawable/bcg_categories" />
 
         <TextView
             style="@style/StyleFragmentTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/baseMargin"
+            android:layout_marginBottom="@dimen/baseMargin"
+            android:padding="@dimen/fragmentTitlePadding"
             android:text="@string/title_categories"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />

@@ -10,4 +10,7 @@
     <dimen name="fragmentTitlePadding">10dp</dimen>
     <dimen name="fragmentTitleSize">20sp</dimen>
     <dimen name="fragmentHeaderHeight">224dp</dimen>
+    <dimen name="categoryCardWidth">156dp</dimen>
+    <dimen name="categoryCardHeight">220dp</dimen>
+    <dimen name="categoryCardImageHeight">130dp</dimen>
 </resources>
