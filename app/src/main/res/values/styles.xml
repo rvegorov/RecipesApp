@@ -11,6 +11,25 @@
         <item name="android:background">@drawable/shape_nav_button</item>
         <item name="backgroundTint">@null</item>
         <item name="android:textAppearance">@style/StyleTitle14</item>
-        <item name="cornerRadius">@dimen/navButtonsRadius</item>
+        <item name="cornerRadius">@dimen/shapesRadius</item>
+    </style>
+
+    <style name="StyleFragmentTitle">
+        <item name="android:textSize">@dimen/fragmentTitleSize</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="android:textColor">@color/violet_color</item>
+        <item name="android:background">@drawable/shape_fragment_title</item>
+    </style>
+    <style name="StyleCategoryCardTitle">
+        <item name="android:fontFamily">@font/montserrat_alternates_bold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/violet_color</item>
+        <item name="android:textAllCaps">true</item>
+    </style>
+    <style name="StyleCategoryCardText">
+        <item name="android:fontFamily">@font/montserrat_medium</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/grey_color</item>
     </style>
 </resources>

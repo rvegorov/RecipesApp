@@ -6,5 +6,11 @@
     <dimen name="navButtonsMargin">2dp</dimen>
     <dimen name="navButtonIconSize">24dp</dimen>
     <dimen name="buttonsTextSize">14sp</dimen>
-    <dimen name="navButtonsRadius">8dp</dimen>
+    <dimen name="shapesRadius">8dp</dimen>
+    <dimen name="fragmentTitlePadding">10dp</dimen>
+    <dimen name="fragmentTitleSize">20sp</dimen>
+    <dimen name="fragmentHeaderHeight">224dp</dimen>
+    <dimen name="categoryCardWidth">156dp</dimen>
+    <dimen name="categoryCardHeight">220dp</dimen>
+    <dimen name="categoryCardImageHeight">130dp</dimen>
 </resources>
