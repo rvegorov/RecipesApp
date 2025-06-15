@@ -34,7 +34,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCategories"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginHorizontal="@dimen/halfMargin"
         android:layout_marginVertical="@dimen/baseMargin"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"

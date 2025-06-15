@@ -12,9 +12,9 @@ import com.example.recipesapp.databinding.ItemCategoryBinding
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
     class ViewHolder(binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
-        val imageView: ImageView = binding.ivCatImage
-        val titleTextView: TextView = binding.tvCatTitle
-        val descriptionTextView: TextView = binding.tvCatDescription
+        val imageView: ImageView = binding.ivCategoryImage
+        val titleTextView: TextView = binding.tvCategoryTitle
+        val descriptionTextView: TextView = binding.tvCategoryDescription
 
     }
 
@@ -34,7 +34,6 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         val data = dataSet[position]
         viewHolder.titleTextView.text = data.title
         viewHolder.descriptionTextView.text = data.description
-
         try {
             val inputStream = viewHolder.imageView.context?.assets?.open(data.imageUrl)
             val imageDrawable = Drawable.createFromStream(inputStream, data.imageUrl)
@@ -42,7 +41,9 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         } catch (e: Exception) {
             Log.e("assets", e.stackTraceToString())
         }
-        viewHolder.imageView.contentDescription = data.title
+        viewHolder.imageView.contentDescription =
+            viewHolder.imageView.context?.
+            getString(R.string.description_category_image_placeholder) + " " + data.title
     }
 
     override fun getItemCount(): Int {
