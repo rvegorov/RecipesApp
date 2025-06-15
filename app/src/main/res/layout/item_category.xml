@@ -8,6 +8,7 @@
     android:layout_marginBottom="@dimen/baseMargin"
     android:background="@color/white_color"
     android:clickable="true"
+    android:foreground="?selectableItemBackground"
     app:cardCornerRadius="@dimen/shapesRadius">
 
     <LinearLayout
@@ -17,26 +18,29 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/ivCatImage"
             android:layout_width="match_parent"
             android:layout_height="@dimen/categoryCardImageHeight"
             android:scaleType="centerCrop"
-            tools:src="@drawable/bcg_categories"
-            tools:contentDescription="картинка категории"/>
+            tools:contentDescription="картинка категории"
+            tools:src="@drawable/bcg_categories" />
 
-            <TextView
-                style="@style/StyleCategoryCardTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/halfMargin"
-                android:layout_marginHorizontal="@dimen/halfMargin"
-                tools:text="Категория" />
+        <TextView
+            android:id="@+id/tvCatTitle"
+            style="@style/StyleCategoryCardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/halfMargin"
+            android:layout_marginTop="@dimen/halfMargin"
+            tools:text="Категория" />
 
-            <TextView
-                style="@style/StyleCategoryCardText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/halfMargin"
-                android:layout_marginHorizontal="@dimen/halfMargin"
-                tools:text="Краткое описание блюд категории" />
+        <TextView
+            android:id="@+id/tvCatDescription"
+            style="@style/StyleCategoryCardText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/halfMargin"
+            android:layout_marginTop="@dimen/halfMargin"
+            tools:text="Краткое описание блюд категории" />
     </LinearLayout>
 </androidx.cardview.widget.CardView>
