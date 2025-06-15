@@ -2,4 +2,7 @@
     <string name="app_name">Recipes App</string>
     <string name="title_categories">Категории</string>
     <string name="title_favourites">Избранное</string>
+    <string name="title_category_placeholder">Категория</string>
+    <string name="description_category_placeholder">Краткое описание блюд этой категории</string>
+    <string name="description_category_image_placeholder">Картинка категории</string>
 </resources>
