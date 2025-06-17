@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/categoryCardHeight"
     android:layout_marginHorizontal="@dimen/halfMargin"
-    android:layout_marginBottom="@dimen/baseMargin"
+    android:layout_marginVertical="@dimen/halfMargin"
     android:background="@color/white_color"
     android:clickable="true"
     android:foreground="?selectableItemBackground"

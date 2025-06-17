@@ -3,6 +3,7 @@ package com.example.recipesapp
 import android.graphics.drawable.Drawable
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
@@ -11,11 +12,22 @@ import com.example.recipesapp.databinding.ItemCategoryBinding
 
 class CategoriesListAdapter(private val dataSet: List<Category>) :
     RecyclerView.Adapter<CategoriesListAdapter.ViewHolder>() {
+
     class ViewHolder(binding: ItemCategoryBinding) : RecyclerView.ViewHolder(binding.root) {
         val imageView: ImageView = binding.ivCategoryImage
         val titleTextView: TextView = binding.tvCategoryTitle
         val descriptionTextView: TextView = binding.tvCategoryDescription
+        val cardView = binding.root
+    }
 
+    interface OnItemClickListener {
+        fun onItemClick()
+    }
+
+    var itemClickListener: OnItemClickListener? = null
+
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
+        itemClickListener = listener
     }
 
     override fun onCreateViewHolder(
@@ -34,6 +46,9 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
         val data = dataSet[position]
         viewHolder.titleTextView.text = data.title
         viewHolder.descriptionTextView.text = data.description
+        viewHolder.cardView.setOnClickListener(OnClickListener {
+            itemClickListener?.onItemClick()
+        })
         try {
             val inputStream = viewHolder.imageView.context?.assets?.open(data.imageUrl)
             val imageDrawable = Drawable.createFromStream(inputStream, data.imageUrl)
@@ -42,8 +57,7 @@ class CategoriesListAdapter(private val dataSet: List<Category>) :
             Log.e("assets", e.stackTraceToString())
         }
         viewHolder.imageView.contentDescription =
-            viewHolder.imageView.context?.
-            getString(R.string.description_category_image_placeholder) + " " + data.title
+            viewHolder.imageView.context?.getString(R.string.description_category_image_placeholder) + " " + data.title
     }
 
     override fun getItemCount(): Int {
