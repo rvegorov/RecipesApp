@@ -5,4 +5,5 @@
     <string name="title_category_placeholder">Категория</string>
     <string name="description_category_placeholder">Краткое описание блюд этой категории</string>
     <string name="description_category_image_placeholder">Картинка категории</string>
+    <string name="title_recipes_placeholder">Рецепты</string>
 </resources>
