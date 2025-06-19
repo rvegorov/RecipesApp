@@ -48,10 +48,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
-    val fragment_version = "1.8.7"
-
-    // Java language implementation
+    val fragment_version = "1.8.8"
     implementation(libs.androidx.fragment)
-    // Kotlin
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
 }
