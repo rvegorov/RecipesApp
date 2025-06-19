@@ -37,17 +37,29 @@ class CategoriesListFragment : Fragment() {
         val categoriesListAdapter = CategoriesListAdapter(STUB.getCategories())
         categoriesListAdapter.setOnItemClickListener(object :
             CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick() {
-                openRecipesByCategoryId()
+            override fun onItemClick(categoryId: Int) {
+                openRecipesByCategoryId(categoryId)
             }
         })
         val recycler = binding.rvCategories
         recycler.adapter = categoriesListAdapter
     }
 
-    fun openRecipesByCategoryId() {
+    fun openRecipesByCategoryId(categoryId: Int) {
+        val category: Category? =
+            STUB.getCategories().firstOrNull() { category -> category.id == categoryId }
+        val categoryName = category?.title
+        val categoryImageUrl = category?.imageUrl
+        val bundle = Bundle()
+
+        if (category != null) {
+            bundle.putInt("ARG_CATEGORY_ID", categoryId)
+            bundle.putString("ARG_CATEGORY_NAME", categoryName)
+            bundle.putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+        }
+
         this.parentFragmentManager.commit {
-            replace(R.id.mainContainer, RecipesListFragment())
+            replace(R.id.mainContainer, RecipesListFragment().javaClass, bundle)
             setReorderingAllowed(true)
         }
     }
