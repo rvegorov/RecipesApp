@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import androidx.fragment.app.replace
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -47,19 +48,19 @@ class CategoriesListFragment : Fragment() {
 
     fun openRecipesByCategoryId(categoryId: Int) {
         val category: Category? =
-            STUB.getCategories().firstOrNull() { category -> category.id == categoryId }
+            STUB.getCategories().firstOrNull { category -> category.id == categoryId }
         val categoryName = category?.title
         val categoryImageUrl = category?.imageUrl
-        val bundle = Bundle()
-
-        if (category != null) {
-            bundle.putInt("ARG_CATEGORY_ID", categoryId)
-            bundle.putString("ARG_CATEGORY_NAME", categoryName)
-            bundle.putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+        val bundle = Bundle().apply {
+            category?.let {
+                putInt("ARG_CATEGORY_ID", categoryId)
+                putString("ARG_CATEGORY_NAME", categoryName)
+                putString("ARG_CATEGORY_IMAGE_URL", categoryImageUrl)
+            }
         }
 
         this.parentFragmentManager.commit {
-            replace(R.id.mainContainer, RecipesListFragment().javaClass, bundle)
+            replace<RecipesListFragment>(containerViewId = R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
         }
     }

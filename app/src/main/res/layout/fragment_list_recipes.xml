@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/main_background_color"
     android:orientation="vertical">
 
@@ -19,8 +20,8 @@
             android:src="@drawable/bcg_categories" />
 
         <TextView
-            style="@style/StyleFragmentTitle"
             android:id="@+id/tvCategoryTitle"
+            style="@style/StyleFragmentTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/baseMargin"
@@ -29,5 +30,18 @@
             android:text="@string/title_recipes_placeholder"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvRecipes"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="@dimen/halfMargin"
+        android:layout_marginTop="@dimen/halfMargin"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:itemCount="8"
+        tools:listitem="@layout/item_recipe">
+
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>

@@ -13,4 +13,7 @@
     <dimen name="categoryCardWidth">156dp</dimen>
     <dimen name="categoryCardHeight">220dp</dimen>
     <dimen name="categoryCardImageHeight">130dp</dimen>
+    <dimen name="recipeCardWidth">334dp</dimen>
+    <dimen name="recipeCardHeight">132dp</dimen>
+    <dimen name="recipeCardImageHeight">100dp</dimen>
 </resources>
