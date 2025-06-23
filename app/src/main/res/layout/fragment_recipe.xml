@@ -6,6 +6,7 @@
     android:background="@color/main_background_color">
 
     <TextView
+        android:id="@+id/recipePlaceholder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/title_recipe_placeholder"

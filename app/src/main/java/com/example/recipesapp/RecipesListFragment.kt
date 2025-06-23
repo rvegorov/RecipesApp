@@ -16,28 +16,18 @@ class RecipesListFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentListRecipesBinding must not to be null")
-    private var _categoryId: Int? = null
-    private var _categoryName: String? = null
-    private var _categoryImageUrl: String? = null
-    val categoryId
-        get() = _categoryId
-            ?: throw IllegalStateException("categoryId must not to be null")
-    val categoryName
-        get() = _categoryName
-            ?: throw IllegalStateException("categoryName not to be null")
-    val categoryImageUrl
-        get() = _categoryImageUrl
-            ?: "bcg_categories"
-
+    private var categoryId: Int? = null
+    private var categoryName: String? = null
+    private var categoryImageUrl: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentListRecipesBinding.inflate(layoutInflater)
-        _categoryId = arguments?.getInt("ARG_CATEGORY_ID")
-        _categoryName = arguments?.getString("ARG_CATEGORY_NAME")
-        _categoryImageUrl = arguments?.getString("ARG_CATEGORY_IMAGE_URL")
+        categoryId = arguments?.getInt(ARG_CATEGORY_ID)
+        categoryName = arguments?.getString(ARG_CATEGORY_NAME)
+        categoryImageUrl = arguments?.getString(ARG_CATEGORY_IMAGE_URL)
         return binding.root
     }
 
@@ -45,7 +35,7 @@ class RecipesListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvCategoryTitle.text = categoryName
         try {
-            val inputStream = binding.ivCategoryHeader.context?.assets?.open(categoryImageUrl)
+            val inputStream = binding.ivCategoryHeader.context?.assets?.open(categoryImageUrl ?: "")
             val imageDrawable = Drawable.createFromStream(inputStream, categoryImageUrl)
             binding.ivCategoryHeader.setImageDrawable(imageDrawable)
         } catch (e: Exception) {
@@ -60,13 +50,13 @@ class RecipesListFragment : Fragment() {
     }
 
     fun initRecycler() {
-        val recipesListAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId))
-        recipesListAdapter.setOnItemClickListener( object :
-            RecipesListAdapter.OnItemClickListener{
-                override fun onItemClick(recipeId: Int) {
-                    openRecipeByRecipeId(recipeId)
-                }
+        val recipesListAdapter = RecipesListAdapter(STUB.getRecipesByCategoryId(categoryId ?: 0))
+        recipesListAdapter.setOnItemClickListener(object :
+            RecipesListAdapter.OnItemClickListener {
+            override fun onItemClick(recipeId: Int) {
+                openRecipeByRecipeId(recipeId)
             }
+        }
         )
         val recycler = binding.rvRecipes
         recycler.adapter = recipesListAdapter
@@ -74,8 +64,15 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
+        val recipe = STUB.getRecipeById(recipeId)
+        val bundle = Bundle().apply {
+            recipe?.let {
+                putParcelable(ARG_RECIPE, recipe)
+            }
+        }
+
         this.parentFragmentManager.commit {
-            replace<RecipeFragment>(containerViewId = R.id.mainContainer)
+            replace<RecipeFragment>(containerViewId = R.id.mainContainer, args = bundle)
             setReorderingAllowed(true)
         }
     }
