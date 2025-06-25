@@ -1,5 +1,7 @@
 package com.example.recipesapp
 
+import kotlin.collections.firstOrNull
+
 object STUB {
     private val categories: List<Category> = listOf(
         Category(
@@ -270,5 +272,9 @@ object STUB {
         return if (categoryId == 0) burgerRecipes
         else
             listOf()
+    }
+
+    fun getRecipeById(recipeId: Int): Recipe? {
+        return burgerRecipes.firstOrNull { recipe -> recipe.id == recipeId }
     }
 }
