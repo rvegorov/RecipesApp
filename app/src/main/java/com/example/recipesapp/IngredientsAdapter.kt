@@ -1,6 +1,5 @@
 package com.example.recipesapp
 
-import android.icu.text.DecimalFormat
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -31,11 +30,14 @@ class IngredientsAdapter(
         position: Int
     ) {
         val data = dataset[position]
+
         var quantityString = ""
-        val ingredientTotalQuantity = data.quantity.toDouble() * quantity.toDouble()
-        if (ingredientTotalQuantity % 1 != 0.0) {
-            quantityString = DecimalFormat("#.#").format(ingredientTotalQuantity)
-        } else quantityString = ingredientTotalQuantity.toInt().toString()
+        val ingredientTotalQuantity = data.quantity.toBigDecimal().times(quantity.toBigDecimal())
+        quantityString = if (ingredientTotalQuantity.stripTrailingZeros().scale() > 0) {
+            ingredientTotalQuantity.setScale(1).toString()
+        } else {
+            ingredientTotalQuantity.setScale(0).toString()
+        }
 
         viewHolder.ingredientNameView.text = data.description
         viewHolder.ingredientQuantityView.text =
