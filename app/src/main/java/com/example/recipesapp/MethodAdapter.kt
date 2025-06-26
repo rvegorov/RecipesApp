@@ -1,0 +1,39 @@
+package com.example.recipesapp
+
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.example.recipesapp.databinding.ItemMethodBinding
+
+
+class MethodAdapter(private val methodList: List<String>) :
+    RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
+
+    class ViewHolder(binding: ItemMethodBinding) : RecyclerView.ViewHolder(binding.root) {
+        val textView = binding.root
+    }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val view = ItemMethodBinding.inflate(inflater, parent, false)
+        return ViewHolder(view)
+    }
+
+    override fun onBindViewHolder(
+        viewHolder: ViewHolder,
+        position: Int
+    ) {
+        val stringFormat =
+            viewHolder.textView.context.getString(R.string.recipe_method_string_format)
+        viewHolder.textView.text = String.format(stringFormat, position+1, methodList[position])
+    }
+
+    override fun getItemCount(): Int {
+        return methodList.size
+    }
+
+
+}

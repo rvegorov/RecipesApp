@@ -8,4 +8,11 @@
     <string name="title_recipes_placeholder">Рецепты</string>
     <string name="title_recipe_placeholder">Рецепт</string>
     <string name="description_recipe_image_placeholder">Картинка рецепта</string>
+    <string name="subtitle_recipe_ingredients">Ингредиенты</string>
+    <string name="subtitle_recipe_method">Способ приготовления</string>
+    <string name="text_recipe_servings">Порции:</string>
+    <string name="text_method_placeholder">Способ приготовления способ приготовления способ приготовления способ приготовления способ приготовления</string>
+    <string name="text_ingredient_placeholder">Ингредиент Ингредиент Ингредиент</string>
+    <string name="recipe_method_string_format">%d. %s</string>
+    <string name="recipe_ingredient_string_format">%s %s</string>
 </resources>
