@@ -62,8 +62,8 @@
                     android:text="@string/text_recipe_servings" />
 
                 <TextView
-                    style="@style/StyleRecipeServings"
                     android:id="@+id/tvRecipeServings"
+                    style="@style/StyleRecipeServings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/smallMargin"
@@ -72,10 +72,11 @@
 
             <SeekBar
                 android:id="@+id/sbServings"
+                style="@style/StyleSeekBar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:min="@integer/recipe_seekbar_min"
                 android:max="@integer/recipe_seekbar_max"
+                android:min="@integer/recipe_seekbar_min"
                 android:progress="@integer/recipe_seekbar_min" />
 
             <androidx.recyclerview.widget.RecyclerView
