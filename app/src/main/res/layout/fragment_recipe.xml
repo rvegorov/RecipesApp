@@ -63,11 +63,20 @@
 
                 <TextView
                     style="@style/StyleRecipeServings"
+                    android:id="@+id/tvRecipeServings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/smallMargin"
-                    tools:text="0" />
+                    android:text="@integer/recipe_seekbar_min" />
             </LinearLayout>
+
+            <SeekBar
+                android:id="@+id/sbServings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:min="@integer/recipe_seekbar_min"
+                android:max="@integer/recipe_seekbar_max"
+                android:progress="@integer/recipe_seekbar_min" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvIngredients"

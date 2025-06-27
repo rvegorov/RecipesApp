@@ -9,6 +9,8 @@ class IngredientsAdapter(
     private val dataset: List<Ingredient>
 ) : RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
+    var quantity: Int = 1
+
     class ViewHolder(binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
         val ingredientNameView = binding.tvIngredientName
         val ingredientQuantityView = binding.tvIngredientQuantity
@@ -28,14 +30,29 @@ class IngredientsAdapter(
         position: Int
     ) {
         val data = dataset[position]
+
+        var quantityString = ""
+        val ingredientTotalQuantity = data.quantity.toBigDecimal().times(quantity.toBigDecimal())
+        quantityString = if (ingredientTotalQuantity.stripTrailingZeros().scale() > 0) {
+            ingredientTotalQuantity.setScale(1).toString()
+        } else {
+            ingredientTotalQuantity.setScale(0).toString()
+        }
+
         viewHolder.ingredientNameView.text = data.description
-        val stringFormat =
-            viewHolder.ingredientNameView.context.getString(R.string.recipe_ingredient_string_format)
         viewHolder.ingredientQuantityView.text =
-            String.format(stringFormat, data.quantity, data.unitOfMeasure)
+            viewHolder.itemView.context.getString(
+                R.string.recipe_ingredient_string_format,
+                quantityString,
+                data.unitOfMeasure
+            )
     }
 
     override fun getItemCount(): Int {
         return dataset.size
+    }
+
+    fun updateIngredients(progress: Int) {
+        quantity = progress
     }
 }
