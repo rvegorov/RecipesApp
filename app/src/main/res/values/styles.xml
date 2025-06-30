@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="StyleTitle14" parent="TextAppearance.AppCompat">
         <item name="android:textSize">@dimen/buttonsTextSize</item>
         <item name="fontFamily">@font/montserrat_alternates_semi_bold</item>
@@ -21,37 +22,48 @@
         <item name="android:textColor">@color/violet_color</item>
         <item name="android:background">@drawable/shape_fragment_title</item>
     </style>
+
     <style name="StyleCategoryCardTitle">
         <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/violet_color</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
     <style name="StyleCategoryCardText">
         <item name="android:fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/grey_color</item>
     </style>
+
     <style name="StyleRecipeSubTitle">
         <item name="android:textSize">@dimen/fragmentTitleSize</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/montserrat_alternates_semi_bold</item>
         <item name="android:textColor">@color/violet_color</item>
     </style>
+
     <style name="StyleRecipeServings">
         <item name="android:textSize">16sp</item>
         <item name="fontFamily">@font/montserrat_semi_bold</item>
         <item name="android:textColor">@color/grey_color</item>
     </style>
+
     <style name="StyleRecipeIngredient">
         <item name="fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/grey_color</item>
         <item name="android:textAllCaps">true</item>
     </style>
+
     <style name="StyleRecipeMethod">
         <item name="fontFamily">@font/montserrat_medium</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">@color/grey_color</item>
+    </style>
+
+    <style name="StyleSeekBar">
+        <item name="android:thumb">@drawable/shape_seekbar_thumb</item>
+        <item name="android:progressDrawable">@drawable/shape_seekbar_progress</item>
     </style>
 </resources>
