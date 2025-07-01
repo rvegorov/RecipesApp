@@ -1,5 +1,6 @@
 package com.example.recipesapp
 
+import android.annotation.SuppressLint
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.Bundle
@@ -27,6 +28,7 @@ class RecipeFragment : Fragment() {
         return binding.root
     }
 
+    @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -61,6 +63,7 @@ class RecipeFragment : Fragment() {
 
         val seekBarView = binding.sbServings
         seekBarView.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onProgressChanged(
                 seekBar: SeekBar?,
                 progress: Int,
@@ -89,6 +92,10 @@ class RecipeFragment : Fragment() {
             binding.ivRecipeHeader.setImageDrawable(imageDrawable)
         } catch (e: Exception) {
             Log.e("assets", e.stackTraceToString())
+        }
+        binding.addToFavouritesButton.setBackgroundResource(R.drawable.ic_heart_empty)
+        binding.addToFavouritesButton.setOnClickListener {
+            it.setBackgroundResource(R.drawable.ic_heart)
         }
     }
 }
