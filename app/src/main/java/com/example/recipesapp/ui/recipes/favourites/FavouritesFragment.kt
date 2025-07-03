@@ -1,6 +1,6 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.favourites
 
-import android.content.Context.MODE_PRIVATE
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import com.example.recipesapp.ARG_RECIPE
+import com.example.recipesapp.FAVOURITES_IDS_KEY
+import com.example.recipesapp.R
+import com.example.recipesapp.SP_NAME
+import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentFavouritesBinding
-import java.util.HashSet
+import com.example.recipesapp.ui.recipes.recipe.RecipeFragment
+import com.example.recipesapp.ui.recipes.recipeList.RecipesListAdapter
 
 class FavoritesFragment : Fragment() {
     private var _binding: FragmentFavouritesBinding? = null
@@ -35,7 +41,6 @@ class FavoritesFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
-
 
     fun initRecycler() {
         val favouritesSet = getFavourites().map {
@@ -73,7 +78,7 @@ class FavoritesFragment : Fragment() {
     }
 
     fun getFavourites(): MutableSet<String> {
-        val sharedPrefs = context?.getSharedPreferences(SP_NAME, MODE_PRIVATE)
+        val sharedPrefs = context?.getSharedPreferences(SP_NAME, Context.MODE_PRIVATE)
         val favouritesSet = sharedPrefs?.getStringSet(
             FAVOURITES_IDS_KEY,
             mutableSetOf()

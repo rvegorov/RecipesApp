@@ -1,4 +1,4 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.recipe
 
 import android.annotation.SuppressLint
 import android.content.Context.MODE_PRIVATE
@@ -14,6 +14,11 @@ import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.core.content.edit
+import com.example.recipesapp.ARG_RECIPE
+import com.example.recipesapp.FAVOURITES_IDS_KEY
+import com.example.recipesapp.R
+import com.example.recipesapp.model.Recipe
+import com.example.recipesapp.SP_NAME
 
 class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
