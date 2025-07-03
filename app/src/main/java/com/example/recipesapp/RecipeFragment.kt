@@ -96,7 +96,7 @@ class RecipeFragment : Fragment() {
             Log.e("assets", e.stackTraceToString())
         }
 
-        val favouritesSet = HashSet<String>(getFavourites())
+        val favouritesSet = getFavourites()
         if (favouritesSet.contains(recipe.id.toString())) {
             setFilledFavouriteIcon()
         } else {
@@ -125,10 +125,11 @@ class RecipeFragment : Fragment() {
 
     fun getFavourites(): MutableSet<String> {
         val sharedPrefs = context?.getSharedPreferences(SP_NAME, MODE_PRIVATE)
-        return sharedPrefs?.getStringSet(
+        val favouritesSet = sharedPrefs?.getStringSet(
             FAVOURITES_IDS_KEY,
             mutableSetOf()
         ) as MutableSet<String>
+        return HashSet<String>(favouritesSet)
     }
 
     fun setEmptyFavouriteIcon() {

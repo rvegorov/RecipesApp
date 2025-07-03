@@ -16,4 +16,5 @@
     <string name="recipe_method_string_format">%d. %s</string>
     <string name="recipe_ingredient_string_format">%s %s</string>
     <string name="favouritesButtonDescription">Кнопка добавления в Избранное</string>
+    <string name="favouritesPlaceholder">Вы еще не добавили ни одного рецепта в избранное</string>
 </resources>
