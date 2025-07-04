@@ -1,8 +1,10 @@
-package com.example.recipesapp
+package com.example.recipesapp.ui.recipes.recipe
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.recipesapp.model.Ingredient
+import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ItemIngredientBinding
 import java.math.BigDecimal
 import java.math.RoundingMode

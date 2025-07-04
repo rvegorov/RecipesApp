@@ -7,6 +7,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.commit
 import com.example.recipesapp.databinding.ActivityMainBinding
+import com.example.recipesapp.ui.categories.CategoriesListFragment
+import com.example.recipesapp.ui.recipes.favourites.FavoritesFragment
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
