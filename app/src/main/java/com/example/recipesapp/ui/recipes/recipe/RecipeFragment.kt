@@ -45,7 +45,7 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recipeStateObserver = Observer<RecipeState> {
-            Log.i("!!!", recipeViewModel.state.value?.isFavourite.toString())
+            Log.i("!!!", it.isFavourite.toString())
         }
         recipeViewModel.state.observe(viewLifecycleOwner, recipeStateObserver)
 
