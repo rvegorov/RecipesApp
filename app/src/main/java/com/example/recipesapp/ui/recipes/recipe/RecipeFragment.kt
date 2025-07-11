@@ -14,17 +14,22 @@ import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.core.content.edit
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.recipesapp.ARG_RECIPE
 import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.R
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.SP_NAME
+import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.RecipeState
 
 class RecipeFragment : Fragment() {
     private var _binding: FragmentRecipeBinding? = null
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not to be null")
+
+    val recipeViewModel: RecipeViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,16 +43,22 @@ class RecipeFragment : Fragment() {
     @Suppress("DEPRECATION")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val recipeStateObserver = Observer<RecipeState> {
+            Log.i("!!!", it.isFavourite.toString())
+        }
+        recipeViewModel.state.observe(viewLifecycleOwner, recipeStateObserver)
+
         val recipe = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             arguments?.getParcelable(ARG_RECIPE, Recipe::class.java)
         } else {
             arguments?.getParcelable<Recipe>(ARG_RECIPE)
         }
+
         recipe?.let {
             initRecycler(it)
             initUI(it)
         }
-
     }
 
     override fun onDestroyView() {
