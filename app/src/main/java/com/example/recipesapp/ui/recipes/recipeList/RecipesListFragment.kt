@@ -12,7 +12,7 @@ import androidx.fragment.app.replace
 import com.example.recipesapp.ARG_CATEGORY_ID
 import com.example.recipesapp.ARG_CATEGORY_IMAGE_URL
 import com.example.recipesapp.ARG_CATEGORY_NAME
-import com.example.recipesapp.ARG_RECIPE
+import com.example.recipesapp.ARG_RECIPE_ID
 import com.example.recipesapp.R
 import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentListRecipesBinding
@@ -71,11 +71,8 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val recipe = STUB.getRecipeById(recipeId)
         val bundle = Bundle().apply {
-            recipe?.let {
-                putParcelable(ARG_RECIPE, recipe)
-            }
+            putInt(ARG_RECIPE_ID, recipeId)
         }
 
         this.parentFragmentManager.commit {
@@ -83,5 +80,4 @@ class RecipesListFragment : Fragment() {
             setReorderingAllowed(true)
         }
     }
-
 }
