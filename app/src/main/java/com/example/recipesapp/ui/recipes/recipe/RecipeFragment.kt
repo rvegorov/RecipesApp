@@ -43,11 +43,7 @@ class RecipeFragment : Fragment() {
         val recipeId = arguments?.getInt(ARG_RECIPE_ID)
         recipeViewModel.loadRecipe(recipeId)
 
-        val recipe = recipeViewModel.state.value?.recipe
-        recipe?.let {
-            initRecycler(it)
-            initUI()
-        }
+        initUI()
     }
 
     override fun onDestroyView() {
@@ -108,6 +104,9 @@ class RecipeFragment : Fragment() {
                 recipeViewModel.onFavoritesClicked()
             }
             setFavouriteIcon(it.isFavourite)
+            recipe?.let {
+                initRecycler(it)
+            }
         }
 
         recipeViewModel.state.observe(viewLifecycleOwner, recipeStateObserver)
