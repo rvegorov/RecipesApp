@@ -276,7 +276,7 @@ object STUB {
             listOf()
     }
 
-    fun getRecipeById(recipeId: Int): Recipe? {
+    fun getRecipeById(recipeId: Int?): Recipe? {
         return burgerRecipes.firstOrNull { recipe -> recipe.id == recipeId }
     }
 
