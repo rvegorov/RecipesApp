@@ -1,7 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -92,14 +91,7 @@ class RecipeFragment : Fragment() {
             Log.i("!!!", "#${it.recipe?.id} is in favourite: ${it.isFavourite}")
             val recipe = it.recipe
             binding.tvRecipeTitle.text = it.recipe?.title
-            try {
-                val inputStream =
-                    binding.ivRecipeHeader.context?.assets?.open(recipe?.imageUrl as String)
-                val imageDrawable = Drawable.createFromStream(inputStream, recipe?.imageUrl)
-                binding.ivRecipeHeader.setImageDrawable(imageDrawable)
-            } catch (e: Exception) {
-                Log.e("assets", e.stackTraceToString())
-            }
+            binding.ivRecipeHeader.setImageDrawable(it.recipeImage)
             binding.favouriteButton.setOnClickListener {
                 recipeViewModel.onFavoritesClicked()
             }
