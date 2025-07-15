@@ -2,6 +2,7 @@ package com.example.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
+import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
@@ -16,7 +17,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     data class RecipeState(
         var recipe: Recipe? = null,
         var isFavourite: Boolean = false,
-        var servingsCount: Int = 1
+        var servingsCount: Int = 1,
+        var recipeImage: Drawable? = null
     )
 
     private val _state: MutableLiveData<RecipeState> = MutableLiveData<RecipeState>(RecipeState())
@@ -36,6 +38,17 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             isFavourite = getFavourites().contains(id.toString()),
             servingsCount = _state.value?.servingsCount ?: 1
         )
+
+        try {
+            val inputStream =
+                getApplication<Application>().assets.open(_state.value?.recipe?.imageUrl as String)
+            val imageDrawable =
+                Drawable.createFromStream(inputStream, _state.value?.recipe?.imageUrl)
+            _state.value?.recipeImage = imageDrawable
+
+        } catch (e: Exception) {
+            Log.e("assets", e.stackTraceToString())
+        }
     }
 
     fun getFavourites(): MutableSet<String> {
