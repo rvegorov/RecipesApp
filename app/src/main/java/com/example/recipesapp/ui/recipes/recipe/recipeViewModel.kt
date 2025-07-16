@@ -82,4 +82,8 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             apply()
         }
     }
+
+    fun setServings(servingsCount: Int) {
+        _state.value = _state.value?.copy(servingsCount = servingsCount)
+    }
 }
