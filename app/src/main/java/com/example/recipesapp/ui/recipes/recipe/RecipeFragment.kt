@@ -14,7 +14,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.example.recipesapp.ARG_RECIPE_ID
 import com.example.recipesapp.R
-import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.RecipeState
 
 class RecipeFragment : Fragment() {
@@ -50,42 +49,7 @@ class RecipeFragment : Fragment() {
         _binding = null
     }
 
-    fun initRecycler(recipe: Recipe) {
-        val context = binding.rvIngredients.context
-        val recyclerDivider =
-            MaterialDividerItemDecoration(context, MaterialDividerItemDecoration.VERTICAL)
-        recyclerDivider.setDividerColorResource(context, R.color.light_grey_color)
-        recyclerDivider.isLastItemDecorated = false
-        binding.rvIngredients.addItemDecoration(recyclerDivider)
-        binding.rvMethod.addItemDecoration(recyclerDivider)
-        val ingredientsAdapter = IngredientsAdapter(recipe.ingredients)
-        binding.rvIngredients.adapter = ingredientsAdapter
-        val methodAdapter = MethodAdapter(recipe.method)
-        binding.rvMethod.adapter = methodAdapter
-
-        val seekBarView = binding.sbServings
-        seekBarView.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            @SuppressLint("NotifyDataSetChanged")
-            override fun onProgressChanged(
-                seekBar: SeekBar?,
-                progress: Int,
-                fromUser: Boolean
-            ) {
-                ingredientsAdapter.updateIngredients(progress)
-                ingredientsAdapter.notifyDataSetChanged()
-                binding.tvRecipeServings.text = progress.toString()
-            }
-
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {
-
-            }
-
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {
-
-            }
-        })
-    }
-
+    @SuppressLint("NotifyDataSetChanged")
     fun initUI() {
         val recipeStateObserver = Observer<RecipeState> {
             Log.i("!!!", "#${it.recipe?.id} is in favourite: ${it.isFavourite}")
@@ -96,8 +60,41 @@ class RecipeFragment : Fragment() {
                 recipeViewModel.onFavoritesClicked()
             }
             setFavouriteIcon(it.isFavourite)
-            recipe?.let {
-                initRecycler(it)
+
+            // Recycler
+            recipe?.run {
+
+                val context = binding.rvIngredients.context
+                val recyclerDivider =
+                    MaterialDividerItemDecoration(context, MaterialDividerItemDecoration.VERTICAL)
+                recyclerDivider.setDividerColorResource(context, R.color.light_grey_color)
+                recyclerDivider.isLastItemDecorated = false
+                binding.rvIngredients.addItemDecoration(recyclerDivider)
+                binding.rvMethod.addItemDecoration(recyclerDivider)
+
+                val ingredientsAdapter = IngredientsAdapter(this.ingredients)
+                binding.rvIngredients.adapter = ingredientsAdapter
+                val methodAdapter = MethodAdapter(this.method)
+                binding.rvMethod.adapter = methodAdapter
+                ingredientsAdapter.updateIngredients(it.servingsCount)
+                ingredientsAdapter.notifyDataSetChanged()
+                binding.tvRecipeServings.text = it.servingsCount.toString()
+
+                val seekBarView = binding.sbServings
+                seekBarView.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+                    @SuppressLint("NotifyDataSetChanged")
+                    override fun onProgressChanged(
+                        seekBar: SeekBar?,
+                        progress: Int,
+                        fromUser: Boolean
+                    ) {
+                        recipeViewModel.setServings(progress)
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+
+                    override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+                })
             }
         }
 
