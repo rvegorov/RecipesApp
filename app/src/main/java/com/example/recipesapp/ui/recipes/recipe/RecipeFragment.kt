@@ -51,9 +51,8 @@ class RecipeFragment : Fragment() {
 
     @SuppressLint("NotifyDataSetChanged")
     fun initUI() {
-        val ingredientsAdapter =
-            IngredientsAdapter(recipeViewModel.state.value?.recipe?.ingredients)
-        val methodAdapter = MethodAdapter(recipeViewModel.state.value?.recipe?.method)
+        val ingredientsAdapter = IngredientsAdapter(null)
+        val methodAdapter = MethodAdapter(null)
 
         binding.rvIngredients.adapter = ingredientsAdapter
         binding.rvMethod.adapter = methodAdapter
@@ -83,6 +82,8 @@ class RecipeFragment : Fragment() {
 
             // Recycler
             recipe?.run {
+                ingredientsAdapter.dataset = it.recipe?.ingredients
+                methodAdapter.methodList = it.recipe?.method
                 ingredientsAdapter.updateIngredients(it.servingsCount)
                 ingredientsAdapter.notifyDataSetChanged()
                 binding.tvRecipeServings.text = it.servingsCount.toString()
