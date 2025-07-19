@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ItemMethodBinding
 
-class MethodAdapter(private val methodList: List<String>) :
+class MethodAdapter(var methodList: List<String>?) :
     RecyclerView.Adapter<MethodAdapter.ViewHolder>() {
 
     class ViewHolder(binding: ItemMethodBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -29,11 +29,11 @@ class MethodAdapter(private val methodList: List<String>) :
         viewHolder.textView.text = viewHolder.itemView.context.getString(
             R.string.recipe_method_string_format,
             position,
-            methodList[position],
+            methodList?.get(position),
         )
     }
 
     override fun getItemCount(): Int {
-        return methodList.size
+        return methodList?.size ?: 0
     }
 }

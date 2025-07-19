@@ -1,5 +1,6 @@
 package com.example.recipesapp.ui.recipes.recipe
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -10,7 +11,7 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 
 class IngredientsAdapter(
-    private val dataset: List<Ingredient>
+    var dataset: List<Ingredient>?
 ) : RecyclerView.Adapter<IngredientsAdapter.ViewHolder>() {
 
     var quantity: Int = 1
@@ -18,6 +19,10 @@ class IngredientsAdapter(
     class ViewHolder(binding: ItemIngredientBinding) : RecyclerView.ViewHolder(binding.root) {
         val ingredientNameView = binding.tvIngredientName
         val ingredientQuantityView = binding.tvIngredientQuantity
+    }
+
+    init {
+        Log.i("!!!", "Ingredients adapter created")
     }
 
     override fun onCreateViewHolder(
@@ -33,25 +38,25 @@ class IngredientsAdapter(
         viewHolder: ViewHolder,
         position: Int
     ) {
-        val data = dataset[position]
+        val data = dataset?.get(position)
 
-        var quantityString = BigDecimal(data.quantity)
+        var quantityString = BigDecimal(data?.quantity)
             .times(BigDecimal(quantity))
             .setScale(1, RoundingMode.HALF_UP)
             .stripTrailingZeros()
             .toPlainString()
 
-        viewHolder.ingredientNameView.text = data.description
+        viewHolder.ingredientNameView.text = data?.description
         viewHolder.ingredientQuantityView.text =
             viewHolder.itemView.context.getString(
                 R.string.recipe_ingredient_string_format,
                 quantityString,
-                data.unitOfMeasure
+                data?.unitOfMeasure
             )
     }
 
     override fun getItemCount(): Int {
-        return dataset.size
+        return dataset?.size ?: 0
     }
 
     fun updateIngredients(progress: Int) {
