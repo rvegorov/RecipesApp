@@ -28,7 +28,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         }
 
     init {
-        Log.i("!!!", "View Model object created")
+        Log.i("!!!", "Recipe View Model object created")
     }
 
     fun loadRecipe(id: Int?) {
