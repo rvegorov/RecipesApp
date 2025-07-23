@@ -20,6 +20,6 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
         }
 
     fun loadCategoriesList() {
-        _state.value?.categoriesList = STUB.getCategories()
+        _state.value = _state.value?.copy(STUB.getCategories())
     }
 }

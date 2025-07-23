@@ -25,20 +25,23 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         }
 
     fun loadRecipesList(categoryId: Int?) {
-        _state.value = RecipesListState(
-            category = STUB.getCategoryById(categoryId),
-            recipesList = STUB.getRecipesByCategoryId(categoryId),
-        )
+        var imageDrawable: Drawable? = null
         try {
             val inputStream =
                 getApplication<Application>().assets.open(_state.value?.category?.imageUrl as String)
-            val imageDrawable =
+            imageDrawable =
                 Drawable.createFromStream(inputStream, _state.value?.category?.imageUrl)
             _state.value?.categoryImage = imageDrawable
 
         } catch (e: Exception) {
             Log.e("assets", e.stackTraceToString())
         }
+
+        _state.value = RecipesListState(
+            category = STUB.getCategoryById(categoryId),
+            recipesList = STUB.getRecipesByCategoryId(categoryId),
+            categoryImage = imageDrawable
+        )
     }
 
 }
