@@ -36,8 +36,6 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
 
     fun loadRecipesList() {
         val favouritesSet = getFavouritesSet().map { it.toInt() }.toSet()
-        _state.value = FavouritesState(
-            recipesList = STUB.getRecipesByIds(favouritesSet)
-        )
+        _state.value = FavouritesState(recipesList = STUB.getRecipesByIds(favouritesSet))
     }
 }
