@@ -28,27 +28,28 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         }
 
     init {
-        Log.i("!!!", "View Model object created")
+        Log.i("!!!", "Recipe View Model object created")
     }
 
     fun loadRecipe(id: Int?) {
-        //TODO("load from somewhere")
-        _state.value = RecipeState(
-            recipe = STUB.getRecipeById(id),
-            isFavourite = getFavourites().contains(id.toString()),
-            servingsCount = _state.value?.servingsCount ?: 1
-        )
-
+        val recipe = STUB.getRecipeById(id)
+        var imageDrawable: Drawable? = null
         try {
             val inputStream =
-                getApplication<Application>().assets.open(_state.value?.recipe?.imageUrl as String)
-            val imageDrawable =
-                Drawable.createFromStream(inputStream, _state.value?.recipe?.imageUrl)
-            _state.value?.recipeImage = imageDrawable
+                getApplication<Application>().assets.open(recipe?.imageUrl as String)
+            imageDrawable =
+                Drawable.createFromStream(inputStream, recipe.imageUrl)
 
         } catch (e: Exception) {
             Log.e("assets", e.stackTraceToString())
         }
+
+        _state.value = RecipeState(
+            recipe = recipe,
+            isFavourite = getFavourites().contains(id.toString()),
+            servingsCount = state.value?.servingsCount ?: 1,
+            recipeImage = imageDrawable,
+        )
     }
 
     fun getFavourites(): MutableSet<String> {

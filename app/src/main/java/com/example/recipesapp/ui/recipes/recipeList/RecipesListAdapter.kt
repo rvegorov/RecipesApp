@@ -12,7 +12,7 @@ import com.example.recipesapp.R
 import com.example.recipesapp.model.Recipe
 import com.example.recipesapp.databinding.ItemRecipeBinding
 
-class RecipesListAdapter(private val dataSet: List<Recipe>) :
+class RecipesListAdapter(var dataSet: List<Recipe>?) :
     RecyclerView.Adapter<RecipesListAdapter.ViewHolder>() {
     class ViewHolder(binding: ItemRecipeBinding) : RecyclerView.ViewHolder(binding.root) {
         val imageView: ImageView = binding.ivRecipeImage
@@ -43,23 +43,26 @@ class RecipesListAdapter(private val dataSet: List<Recipe>) :
         viewHolder: ViewHolder,
         position: Int
     ) {
-        val data = dataSet[position]
-        viewHolder.titleTextView.text = data.title
-        try {
-            val inputStream = viewHolder.imageView.context?.assets?.open(data.imageUrl)
-            val imageDrawable = Drawable.createFromStream(inputStream, data.imageUrl)
-            viewHolder.imageView.setImageDrawable(imageDrawable)
-            viewHolder.cardView.setOnClickListener(OnClickListener {
-                itemClickListener?.onItemClick(data.id)
-            })
-        } catch (e: Exception) {
-            Log.e("assets", e.stackTraceToString())
+        val data = dataSet?.get(position)
+        data?.run {
+            viewHolder.titleTextView.text = data.title
+            try {
+                val inputStream =
+                    viewHolder.imageView.context?.assets?.open(data.imageUrl.toString())
+                val imageDrawable = Drawable.createFromStream(inputStream, data.imageUrl)
+                viewHolder.imageView.setImageDrawable(imageDrawable)
+                viewHolder.cardView.setOnClickListener(OnClickListener {
+                    itemClickListener?.onItemClick(data.id)
+                })
+            } catch (e: Exception) {
+                Log.e("assets", e.stackTraceToString())
+            }
+            viewHolder.imageView.contentDescription =
+                viewHolder.imageView.context?.getString(R.string.description_recipe_image_placeholder) + " " + data.title
         }
-        viewHolder.imageView.contentDescription =
-            viewHolder.imageView.context?.getString(R.string.description_recipe_image_placeholder) + " " + data.title
     }
 
     override fun getItemCount(): Int {
-        return dataSet.size
+        return dataSet?.size ?: 0
     }
 }

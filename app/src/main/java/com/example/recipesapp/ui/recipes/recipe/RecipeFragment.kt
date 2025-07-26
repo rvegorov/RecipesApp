@@ -2,7 +2,6 @@ package com.example.recipesapp.ui.recipes.recipe
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -71,8 +70,9 @@ class RecipeFragment : Fragment() {
         }
 
         val recipeStateObserver = Observer<RecipeState> {
-            Log.i("!!!", "#${it.recipe?.id} is in favourite: ${it.isFavourite}")
             val recipe = it.recipe
+
+            // Recipe UI
             binding.tvRecipeTitle.text = it.recipe?.title
             binding.ivRecipeHeader.setImageDrawable(it.recipeImage)
             binding.favouriteButton.setOnClickListener {
@@ -82,10 +82,10 @@ class RecipeFragment : Fragment() {
 
             // Recycler
             recipe?.run {
-                ingredientsAdapter.dataset = it.recipe?.ingredients
-                methodAdapter.methodList = it.recipe?.method
+                ingredientsAdapter.dataset = this.ingredients
+                methodAdapter.methodList = this.method
                 ingredientsAdapter.updateIngredients(it.servingsCount)
-                ingredientsAdapter.notifyDataSetChanged()
+                ingredientsAdapter.notifyItemRangeChanged(0, ingredientsAdapter.itemCount)
                 binding.tvRecipeServings.text = it.servingsCount.toString()
 
                 seekBarView.setOnSeekBarChangeListener(portionSeekBarListener)

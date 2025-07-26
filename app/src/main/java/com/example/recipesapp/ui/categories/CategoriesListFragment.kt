@@ -7,12 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.fragment.app.replace
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.recipesapp.ARG_CATEGORY_ID
-import com.example.recipesapp.ARG_CATEGORY_IMAGE_URL
-import com.example.recipesapp.ARG_CATEGORY_NAME
-import com.example.recipesapp.model.Category
 import com.example.recipesapp.R
-import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListFragment
 
@@ -21,6 +19,7 @@ class CategoriesListFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentListCategoriesBinding must not to be null")
+    private val categoriesListViewModel: CategoriesListViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -34,6 +33,7 @@ class CategoriesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initRecycler()
+        categoriesListViewModel.loadCategoriesList()
     }
 
     override fun onDestroyView() {
@@ -42,28 +42,24 @@ class CategoriesListFragment : Fragment() {
     }
 
     fun initRecycler() {
-        val categoriesListAdapter = CategoriesListAdapter(STUB.getCategories())
-        categoriesListAdapter.setOnItemClickListener(object :
-            CategoriesListAdapter.OnItemClickListener {
-            override fun onItemClick(categoryId: Int) {
-                openRecipesByCategoryId(categoryId)
-            }
-        })
-        val recycler = binding.rvCategories
-        recycler.adapter = categoriesListAdapter
+        val categoriesListAdapter = CategoriesListAdapter(null)
+        binding.rvCategories.adapter = categoriesListAdapter
+
+        val categoriesListObserver = Observer<CategoriesListViewModel.CategoriesListState> {
+            categoriesListAdapter.dataSet = it.categoriesList
+            categoriesListAdapter.setOnItemClickListener(object :
+                CategoriesListAdapter.OnItemClickListener {
+                override fun onItemClick(categoryId: Int) {
+                    openRecipesByCategoryId(categoryId)
+                }
+            })
+        }
+        categoriesListViewModel.state.observe(viewLifecycleOwner, categoriesListObserver)
     }
 
     fun openRecipesByCategoryId(categoryId: Int) {
-        val category: Category? =
-            STUB.getCategories().firstOrNull { category -> category.id == categoryId }
-        val categoryName = category?.title
-        val categoryImageUrl = category?.imageUrl
         val bundle = Bundle().apply {
-            category?.let {
-                putInt(ARG_CATEGORY_ID, categoryId)
-                putString(ARG_CATEGORY_NAME, categoryName)
-                putString(ARG_CATEGORY_IMAGE_URL, categoryImageUrl)
-            }
+            putInt(ARG_CATEGORY_ID, categoryId)
         }
 
         this.parentFragmentManager.commit {
