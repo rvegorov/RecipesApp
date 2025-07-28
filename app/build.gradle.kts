@@ -27,7 +27,7 @@ android {
             )
         }
     }
-    buildFeatures{
+    buildFeatures {
         viewBinding = true
     }
     compileOptions {
@@ -49,8 +49,15 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Fragment
     val fragment_version = "1.8.8"
     implementation(libs.androidx.fragment)
     implementation("androidx.fragment:fragment-ktx:$fragment_version")
+
+    // Navigation
+    val nav_version = "2.9.2"
+    implementation("androidx.navigation:navigation-fragment:$nav_version")
+    implementation("androidx.navigation:navigation-ui:$nav_version")
 
 }
