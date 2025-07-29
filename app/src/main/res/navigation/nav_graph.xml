@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_list_categories" />
     <fragment
         android:id="@+id/favoritesFragment"
-        android:name="com.example.recipesapp.ui.recipes.favourites.FavoritesFragment"
+        android:name="com.example.recipesapp.ui.recipes.favourites.FavouritesFragment"
         android:label="FavoritesFragment"
         tools:layout="@layout/fragment_favourites" />
     <fragment

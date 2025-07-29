@@ -14,7 +14,7 @@ import com.example.recipesapp.databinding.FragmentFavouritesBinding
 import com.example.recipesapp.ui.recipes.favourites.FavouritesViewModel.FavouritesState
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListAdapter
 
-class FavoritesFragment : Fragment() {
+class FavouritesFragment : Fragment() {
     private var _binding: FragmentFavouritesBinding? = null
     private val binding
         get() = _binding

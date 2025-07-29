@@ -51,13 +51,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Fragment
-    val fragment_version = "1.8.8"
     implementation(libs.androidx.fragment)
-    implementation("androidx.fragment:fragment-ktx:$fragment_version")
+    implementation(libs.androidx.fragment.ktx)
 
     // Navigation
-    val nav_version = "2.9.2"
-    implementation("androidx.navigation:navigation-fragment:$nav_version")
-    implementation("androidx.navigation:navigation-ui:$nav_version")
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
 }
