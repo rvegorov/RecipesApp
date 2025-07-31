@@ -9,8 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.recipesapp.ARG_CATEGORY_ID
-import com.example.recipesapp.ARG_RECIPE_ID
-import com.example.recipesapp.R
 import com.example.recipesapp.databinding.FragmentListRecipesBinding
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListViewModel.RecipesListState
 
@@ -63,9 +61,10 @@ class RecipesListFragment : Fragment() {
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_RECIPE_ID, recipeId)
-        }
-        findNavController().navigate(R.id.recipeFragment, bundle)
+        findNavController().navigate(
+            RecipesListFragmentDirections.actionRecipesListFragmentToRecipeFragment(
+                recipeId
+            )
+        )
     }
 }

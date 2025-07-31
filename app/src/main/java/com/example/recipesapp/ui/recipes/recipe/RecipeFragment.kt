@@ -12,7 +12,7 @@ import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import com.example.recipesapp.ARG_RECIPE_ID
+import androidx.navigation.fragment.navArgs
 import com.example.recipesapp.R
 import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.RecipeState
 
@@ -24,6 +24,8 @@ class RecipeFragment : Fragment() {
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not to be null")
 
     val recipeViewModel: RecipeViewModel by viewModels()
+
+    val recipeArgs: RecipeFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -37,7 +39,7 @@ class RecipeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val recipeId = arguments?.getInt(ARG_RECIPE_ID)
+        val recipeId = recipeArgs.recipeId
         recipeViewModel.loadRecipe(recipeId)
 
         initUI()
