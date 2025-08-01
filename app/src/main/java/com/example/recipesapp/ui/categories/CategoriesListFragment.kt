@@ -8,8 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.recipesapp.ARG_CATEGORY_ID
-import com.example.recipesapp.R
+import com.example.recipesapp.data.STUB
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 
 class CategoriesListFragment : Fragment() {
@@ -56,9 +55,15 @@ class CategoriesListFragment : Fragment() {
     }
 
     fun openRecipesByCategoryId(categoryId: Int) {
-        val bundle = Bundle().apply {
-            putInt(ARG_CATEGORY_ID, categoryId)
+        val category = STUB.getCategoryById(categoryId)
+        if (category == null) {
+            throw IllegalArgumentException("Category not found!")
         }
-        findNavController().navigate(R.id.recipesListFragment, bundle)
+
+        findNavController().navigate(
+            CategoriesListFragmentDirections.actionCategoriesListFragmentToRecipesListFragment(
+                category
+            )
+        )
     }
 }
