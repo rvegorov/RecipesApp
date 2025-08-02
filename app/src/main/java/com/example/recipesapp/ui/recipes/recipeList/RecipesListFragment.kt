@@ -8,8 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.example.recipesapp.ARG_CATEGORY_ID
+import androidx.navigation.fragment.navArgs
 import com.example.recipesapp.databinding.FragmentListRecipesBinding
+import com.example.recipesapp.model.Category
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListViewModel.RecipesListState
 
 class RecipesListFragment : Fragment() {
@@ -17,20 +18,21 @@ class RecipesListFragment : Fragment() {
     private val binding
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentListRecipesBinding must not to be null")
-    private var categoryId: Int? = null
+    private lateinit var category: Category
     private val recipesListViewModel: RecipesListViewModel by viewModels()
+    private val recipeListArgs: RecipesListFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentListRecipesBinding.inflate(layoutInflater)
-        categoryId = arguments?.getInt(ARG_CATEGORY_ID)
+        category = recipeListArgs.category
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        recipesListViewModel.loadRecipesList(categoryId)
+        recipesListViewModel.loadRecipesList(category)
         initUI()
     }
 
