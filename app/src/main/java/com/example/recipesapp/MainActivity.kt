@@ -10,9 +10,10 @@ import androidx.navigation.findNavController
 import com.example.recipesapp.databinding.ActivityMainBinding
 import com.example.recipesapp.model.Category
 import kotlinx.serialization.json.Json
-import java.net.URL
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import java.util.concurrent.Executors
-import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -21,14 +22,15 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val apiThread = Thread {
-            val url = URL(API_URL + "category")
-            val connection = url.openConnection() as HttpsURLConnection
-            connection.connect()
-            val body = connection.inputStream.bufferedReader().readText()
-            Log.i("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
-            Log.i("!!!", "response code: ${connection.responseCode}")
-            Log.i("!!!", "response message: ${connection.responseMessage}")
-            Log.i("!!!", "Body: $body")
+            lateinit var body: String
+            val logging = HttpLoggingInterceptor()
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+            val client = OkHttpClient.Builder().addInterceptor(logging).build()
+            val request: Request = Request.Builder().url(API_URL + "category").build()
+            client.newCall(request).execute().use { response ->
+                body = response.body.string()
+                Log.i("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
+            }
 
             val categories: List<Category> = Json.decodeFromString(body)
             val categoryIdList = categories.map { it.id }
@@ -36,11 +38,11 @@ class MainActivity : AppCompatActivity() {
 
             categoryIdList.forEach { id ->
                 threadPool.execute {
-                    val url = URL(API_URL + "category/$id/recipes")
-                    val connection = url.openConnection() as HttpsURLConnection
-                    connection.connect()
-                    val recipeList = connection.inputStream.bufferedReader().readText()
-                    Log.i("!!!", "Поток ${Thread.currentThread().name}, рецепты: $recipeList")
+                    val request: Request =
+                        Request.Builder().url(API_URL + "category/$id/recipes").build()
+                    client.newCall(request).execute().use {
+                        Log.i("!!!", "Поток: ${Thread.currentThread().name}, категория: $id")
+                    }
                 }
             }
         }
