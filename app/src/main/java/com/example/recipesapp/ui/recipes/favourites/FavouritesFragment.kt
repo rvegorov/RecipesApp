@@ -28,9 +28,8 @@ class FavouritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        favouritesViewModel.loadRecipesList()
         initRecycler()
+        favouritesViewModel.loadRecipesList()
     }
 
     override fun onDestroyView() {
@@ -47,6 +46,8 @@ class FavouritesFragment : Fragment() {
             favouritesSet?.run {
                 if (favouritesSet.isNotEmpty()) {
                     recipesListAdapter.dataSet = it.recipesList
+                    recipesListAdapter.notifyItemRangeChanged(0, recipesListAdapter.itemCount)
+
                     recipesListAdapter.setOnItemClickListener(object :
                         RecipesListAdapter.OnItemClickListener {
                         override fun onItemClick(recipeId: Int) {

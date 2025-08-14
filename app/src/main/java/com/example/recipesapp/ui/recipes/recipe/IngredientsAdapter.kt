@@ -40,11 +40,16 @@ class IngredientsAdapter(
     ) {
         val data = dataset?.get(position)
 
-        var quantityString = BigDecimal(data?.quantity)
-            .times(BigDecimal(quantity))
-            .setScale(1, RoundingMode.HALF_UP)
-            .stripTrailingZeros()
-            .toPlainString()
+        var quantityString = data?.quantity.toString()
+        if (data?.quantity?.toBigDecimalOrNull() != null) {
+            quantityString = BigDecimal(data.quantity)
+                .times(BigDecimal(quantity))
+                .setScale(1, RoundingMode.HALF_UP)
+                .stripTrailingZeros()
+                .toPlainString()
+        } else {
+            quantityString = data?.quantity.toString()
+        }
 
         viewHolder.ingredientNameView.text = data?.description
         viewHolder.ingredientQuantityView.text =

@@ -1,51 +1,17 @@
 package com.example.recipesapp
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.navigation.findNavController
 import com.example.recipesapp.databinding.ActivityMainBinding
-import com.example.recipesapp.model.Category
-import kotlinx.serialization.json.Json
-import java.net.URL
-import java.util.concurrent.Executors
-import javax.net.ssl.HttpsURLConnection
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val threadPool = Executors.newFixedThreadPool(10)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        val apiThread = Thread {
-            val url = URL(API_URL + "category")
-            val connection = url.openConnection() as HttpsURLConnection
-            connection.connect()
-            val body = connection.inputStream.bufferedReader().readText()
-            Log.i("!!!", "Выполняю запрос на потоке: ${Thread.currentThread().name}")
-            Log.i("!!!", "response code: ${connection.responseCode}")
-            Log.i("!!!", "response message: ${connection.responseMessage}")
-            Log.i("!!!", "Body: $body")
-
-            val categories: List<Category> = Json.decodeFromString(body)
-            val categoryIdList = categories.map { it.id }
-            Log.i("!!!", "Получено категорий: ${categories.size}")
-
-            categoryIdList.forEach { id ->
-                threadPool.execute {
-                    val url = URL(API_URL + "category/$id/recipes")
-                    val connection = url.openConnection() as HttpsURLConnection
-                    connection.connect()
-                    val recipeList = connection.inputStream.bufferedReader().readText()
-                    Log.i("!!!", "Поток ${Thread.currentThread().name}, рецепты: $recipeList")
-                }
-            }
-        }
-        apiThread.start()
-        Log.i("!!!", "Метод onCreate() выполняется на потоке: ${Thread.currentThread().name}")
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         enableEdgeToEdge()

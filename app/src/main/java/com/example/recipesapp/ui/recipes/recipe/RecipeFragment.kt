@@ -1,6 +1,5 @@
 package com.example.recipesapp.ui.recipes.recipe
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,6 +26,7 @@ class RecipeFragment : Fragment() {
 
     private val recipeArgs: RecipeFragmentArgs by navArgs()
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
@@ -40,6 +40,7 @@ class RecipeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val recipeId = recipeArgs.recipeId
+
         recipeViewModel.loadRecipe(recipeId)
 
         initUI()
@@ -50,7 +51,6 @@ class RecipeFragment : Fragment() {
         _binding = null
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun initUI() {
         val ingredientsAdapter = IngredientsAdapter(null)
         val methodAdapter = MethodAdapter(null)
@@ -74,20 +74,21 @@ class RecipeFragment : Fragment() {
         val recipeStateObserver = Observer<RecipeState> {
             val recipe = it.recipe
 
-            // Recipe UI
-            binding.tvRecipeTitle.text = it.recipe?.title
-            binding.ivRecipeHeader.setImageDrawable(it.recipeImage)
-            binding.favouriteButton.setOnClickListener {
-                recipeViewModel.onFavoritesClicked()
-            }
-            setFavouriteIcon(it.isFavourite)
-
-            // Recycler
             recipe?.run {
+                // Recipe UI
+                binding.tvRecipeTitle.text = this.title
+                binding.ivRecipeHeader.setImageDrawable(it.recipeImage)
+                binding.favouriteButton.setOnClickListener {
+                    recipeViewModel.onFavoritesClicked()
+                }
+                setFavouriteIcon(it.isFavourite)
+
+                // Recycler
                 ingredientsAdapter.dataset = this.ingredients
                 methodAdapter.methodList = this.method
                 ingredientsAdapter.updateIngredients(it.servingsCount)
                 ingredientsAdapter.notifyItemRangeChanged(0, ingredientsAdapter.itemCount)
+                methodAdapter.notifyItemRangeChanged(0, methodAdapter.itemCount)
                 binding.tvRecipeServings.text = it.servingsCount.toString()
 
                 seekBarView.setOnSeekBarChangeListener(portionSeekBarListener)
