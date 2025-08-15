@@ -1,13 +1,13 @@
 package com.example.recipesapp.ui.categories
 
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View.OnClickListener
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.R
 import com.example.recipesapp.databinding.ItemCategoryBinding
@@ -45,22 +45,22 @@ class CategoriesListAdapter(var dataSet: List<Category>?) :
         viewHolder: ViewHolder,
         position: Int
     ) {
-        val data = dataSet?.get(position)
-        data?.let {
-            viewHolder.titleTextView.text = data.title
-            viewHolder.descriptionTextView.text = data.description
+        val category = dataSet?.get(position)
+        category?.let {
+            viewHolder.titleTextView.text = category.title
+            viewHolder.descriptionTextView.text = category.description
             viewHolder.cardView.setOnClickListener(OnClickListener {
-                itemClickListener?.onItemClick(data)
+                itemClickListener?.onItemClick(category)
             })
-            try {
-                val inputStream = viewHolder.imageView.context?.assets?.open(data.imageUrl)
-                val imageDrawable = Drawable.createFromStream(inputStream, data.imageUrl)
-                viewHolder.imageView.setImageDrawable(imageDrawable)
-            } catch (e: Exception) {
-                Log.e("assets", e.stackTraceToString())
-            }
+
+            Glide.with(viewHolder.cardView)
+                .load("$API_IMG_URL${category.imageUrl}")
+                .placeholder(R.drawable.img_placeholder)
+                .error(R.drawable.img_error)
+                .into(viewHolder.imageView)
+
             viewHolder.imageView.contentDescription =
-                viewHolder.imageView.context?.getString(R.string.description_category_image_placeholder) + " " + data.title
+                viewHolder.imageView.context?.getString(R.string.description_category_image_placeholder) + " " + category.title
         }
     }
 

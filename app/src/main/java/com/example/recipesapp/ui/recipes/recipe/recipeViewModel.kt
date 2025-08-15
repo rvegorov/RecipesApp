@@ -2,7 +2,6 @@ package com.example.recipesapp.ui.recipes.recipe
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import android.graphics.drawable.Drawable
 import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
@@ -10,6 +9,7 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.SP_NAME
 import com.example.recipesapp.data.RecipesRepository
@@ -21,7 +21,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         var recipe: Recipe? = null,
         var isFavourite: Boolean = false,
         var servingsCount: Int = 1,
-        var recipeImage: Drawable? = null
+        var recipeImageUrl: String? = null
     )
 
     private val threadPool = newFixedThreadPool(4)
@@ -43,14 +43,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
         threadPool.execute {
             val repository = RecipesRepository()
             val recipe = repository.getRecipeById(id)
-            var imageDrawable: Drawable? = null
-            try {
-                val inputStream = context.assets.open(recipe?.imageUrl as String)
-                imageDrawable = Drawable.createFromStream(inputStream, recipe.imageUrl)
-
-            } catch (e: Exception) {
-                Log.e("assets", e.stackTraceToString())
-            }
             ContextCompat.getMainExecutor(context).execute {
                 if (recipe == null) {
                     Toast.makeText(
@@ -63,7 +55,7 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
                     recipe = recipe,
                     isFavourite = getFavourites().contains(id.toString()),
                     servingsCount = state.value?.servingsCount ?: 1,
-                    recipeImage = imageDrawable,
+                    recipeImageUrl = "$API_IMG_URL${recipe?.imageUrl}",
                 )
             )
         }
