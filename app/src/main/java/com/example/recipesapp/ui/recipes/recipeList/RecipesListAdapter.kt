@@ -51,12 +51,13 @@ class RecipesListAdapter(var dataSet: List<Recipe>?) :
                     viewHolder.imageView.context?.assets?.open(data.imageUrl.toString())
                 val imageDrawable = Drawable.createFromStream(inputStream, data.imageUrl)
                 viewHolder.imageView.setImageDrawable(imageDrawable)
-                viewHolder.cardView.setOnClickListener(OnClickListener {
-                    itemClickListener?.onItemClick(data.id)
-                })
             } catch (e: Exception) {
                 Log.e("assets", e.stackTraceToString())
             }
+
+            viewHolder.cardView.setOnClickListener(OnClickListener {
+                itemClickListener?.onItemClick(data.id)
+            })
             viewHolder.imageView.contentDescription =
                 viewHolder.imageView.context?.getString(R.string.description_recipe_image_placeholder) + " " + data.title
         }

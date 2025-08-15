@@ -32,7 +32,9 @@ class RecipesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         recipesListViewModel.loadRecipesList(category)
+
         initUI()
     }
 
@@ -52,6 +54,8 @@ class RecipesListFragment : Fragment() {
 
             // Recycler
             recipesListAdapter.dataSet = it.recipesList
+            recipesListAdapter.notifyItemRangeChanged(0, recipesListAdapter.itemCount)
+
             recipesListAdapter.setOnItemClickListener(object :
                 RecipesListAdapter.OnItemClickListener {
                 override fun onItemClick(recipeId: Int) {

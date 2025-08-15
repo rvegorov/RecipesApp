@@ -23,7 +23,7 @@ class CategoriesListAdapter(var dataSet: List<Category>?) :
     }
 
     interface OnItemClickListener {
-        fun onItemClick(categoryId: Int)
+        fun onItemClick(category: Category)
     }
 
     var itemClickListener: OnItemClickListener? = null
@@ -50,7 +50,7 @@ class CategoriesListAdapter(var dataSet: List<Category>?) :
             viewHolder.titleTextView.text = data.title
             viewHolder.descriptionTextView.text = data.description
             viewHolder.cardView.setOnClickListener(OnClickListener {
-                itemClickListener?.onItemClick(data.id)
+                itemClickListener?.onItemClick(data)
             })
             try {
                 val inputStream = viewHolder.imageView.context?.assets?.open(data.imageUrl)

@@ -2,13 +2,16 @@ package com.example.recipesapp.ui.recipes.favourites
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.SP_NAME
-import com.example.recipesapp.data.STUB
+import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
+import java.util.concurrent.Executors.newFixedThreadPool
 
 class FavouritesViewModel(application: Application) : AndroidViewModel(application) {
     data class FavouritesState(
@@ -22,8 +25,12 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
             return _state
         }
 
+    private val threadPool = newFixedThreadPool(4)
+
+    private val context = getApplication<Application>()
+
     private fun getFavouritesSet(): Set<String> {
-        val sharedPrefs = getApplication<Application>().getSharedPreferences(
+        val sharedPrefs = context.getSharedPreferences(
             SP_NAME,
             MODE_PRIVATE
         )
@@ -35,7 +42,20 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun loadRecipesList() {
-        val favouritesSet = getFavouritesSet().map { it.toInt() }.toSet()
-        _state.value = FavouritesState(recipesList = STUB.getRecipesByIds(favouritesSet))
+        threadPool.execute {
+            val favouritesSet = getFavouritesSet().map { it.toInt() }.toSet()
+            val repository = RecipesRepository()
+            val recipes: List<Recipe>? = repository.getRecipesByIds(favouritesSet)
+            ContextCompat.getMainExecutor(context).execute {
+                if (recipes == null) {
+                    Toast.makeText(
+                        context.applicationContext,
+                        "Ошибка получения данных",
+                        Toast.LENGTH_LONG
+                    ).show()
+                }
+            }
+            _state.postValue(FavouritesState(recipesList = recipes))
+        }
     }
 }

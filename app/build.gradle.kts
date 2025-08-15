@@ -69,6 +69,6 @@ dependencies {
     //HTTP
     implementation(libs.okhttp)
     implementation(libs.okhttp3.logging.interceptor)
+    implementation(libs.retrofit)
+    implementation(libs.retrofit2.kotlinx.serialization.converter)
 }
-
-
