@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.example.recipesapp"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.recipesapp"
@@ -71,4 +71,7 @@ dependencies {
     implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    //Images
+    implementation(libs.glide)
 }

@@ -1,13 +1,12 @@
 package com.example.recipesapp.ui.recipes.recipeList
 
 import android.app.Application
-import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
@@ -16,7 +15,7 @@ import java.util.concurrent.Executors.newFixedThreadPool
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
     data class RecipesListState(
         var category: Category? = null,
-        var categoryImage: Drawable? = null,
+        var categoryImageUrl: String? = null,
         var recipesList: List<Recipe>? = null,
     )
 
@@ -31,16 +30,6 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesList(category: Category) {
         threadPool.execute {
-            var imageDrawable: Drawable? = null
-            try {
-                val inputStream =
-                    context.assets.open(category.imageUrl)
-                imageDrawable =
-                    Drawable.createFromStream(inputStream, category.imageUrl)
-            } catch (e: Exception) {
-                Log.e("assets", e.stackTraceToString())
-            }
-
             val repository = RecipesRepository()
             val recipesList = repository.getRecipesByCategoryId(category.id)
 
@@ -55,7 +44,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 RecipesListState(
                     category = category,
                     recipesList = recipesList,
-                    categoryImage = imageDrawable
+                    categoryImageUrl = "$API_IMG_URL${category.imageUrl}"
                 )
             )
         }

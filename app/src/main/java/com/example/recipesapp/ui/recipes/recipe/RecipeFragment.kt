@@ -12,6 +12,7 @@ import com.google.android.material.divider.MaterialDividerItemDecoration
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import com.bumptech.glide.Glide
 import com.example.recipesapp.R
 import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.RecipeState
 
@@ -77,7 +78,13 @@ class RecipeFragment : Fragment() {
             recipe?.run {
                 // Recipe UI
                 binding.tvRecipeTitle.text = this.title
-                binding.ivRecipeHeader.setImageDrawable(it.recipeImage)
+
+                Glide.with(this@RecipeFragment)
+                    .load(it.recipeImageUrl)
+                    .placeholder(R.drawable.img_placeholder)
+                    .error(R.drawable.img_error)
+                    .into(binding.ivRecipeHeader)
+                
                 binding.favouriteButton.setOnClickListener {
                     recipeViewModel.onFavoritesClicked()
                 }
