@@ -4,16 +4,17 @@ import android.app.Application
 import android.content.Context.MODE_PRIVATE
 import android.util.Log
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.SP_NAME
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors.newFixedThreadPool
 
 class RecipeViewModel(application: Application) : AndroidViewModel(application) {
@@ -40,15 +41,13 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
     fun loadRecipe(id: Int) {
 
-        threadPool.execute {
+        viewModelScope.launch {
             val repository = RecipesRepository()
             val recipe = repository.getRecipeById(id)
-            ContextCompat.getMainExecutor(context).execute {
-                if (recipe == null) {
-                    Toast.makeText(
-                        context.applicationContext, "Ошибка получения данных", Toast.LENGTH_LONG
-                    ).show()
-                }
+            if (recipe == null) {
+                Toast.makeText(
+                    context.applicationContext, "Ошибка получения данных", Toast.LENGTH_LONG
+                ).show()
             }
             _state.postValue(
                 RecipeState(
