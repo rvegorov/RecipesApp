@@ -5,6 +5,8 @@ import com.example.recipesapp.API_URL
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -28,55 +30,66 @@ class RecipesRepository {
 
     val apiService: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    fun getRecipeById(recipeId: Int): Recipe? {
+    suspend fun getRecipeById(recipeId: Int): Recipe? {
         return try {
-            apiService.getRecipeById(recipeId)
-                .execute()
-                .body()
+            withContext(Dispatchers.IO) {
+                apiService.getRecipeById(recipeId)
+                    .execute()
+                    .body()
+            }
+
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
         }
     }
 
-    fun getRecipesByIds(recipesIdsSet: Set<Int>): List<Recipe>? {
+    suspend fun getRecipesByIds(recipesIdsSet: Set<Int>): List<Recipe>? {
         val recipesIdsString = recipesIdsSet.joinToString(",")
         return try {
-            apiService.getRecipesByIds(recipesIdsString)
-                .execute()
-                .body()
+            withContext(Dispatchers.IO) {
+                apiService.getRecipesByIds(recipesIdsString)
+                    .execute()
+                    .body()
+            }
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
         }
     }
 
-    fun getCategoryById(categoryId: Int): Category? {
+    suspend fun getCategoryById(categoryId: Int): Category? {
         return try {
-            apiService.getCategoryById(categoryId)
-                .execute()
-                .body()
+            withContext(Dispatchers.IO) {
+                apiService.getCategoryById(categoryId)
+                    .execute()
+                    .body()
+            }
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
         }
     }
 
-    fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
+    suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return try {
-            apiService.getRecipesByCategoryId(categoryId)
-                .execute()
-                .body()
+            withContext(Dispatchers.IO) {
+                apiService.getRecipesByCategoryId(categoryId)
+                    .execute()
+                    .body()
+            }
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
         }
     }
 
-    fun getCategories(): List<Category>? {
+    suspend fun getCategories(): List<Category>? {
         return try {
-            apiService.getCategories()
-                .execute().body()
+            withContext(Dispatchers.IO) {
+                apiService.getCategories()
+                    .execute().body()
+            }
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
