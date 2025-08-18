@@ -2,12 +2,12 @@ package com.example.recipesapp.ui.recipes.favourites
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.FAVOURITES_IDS_KEY
+import com.example.recipesapp.R
 import com.example.recipesapp.SP_NAME
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
@@ -18,11 +18,21 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
         var recipesList: List<Recipe>? = null
     )
 
+    data class UiMessage(
+        var message: String? = null
+    )
+
     private val _state: MutableLiveData<FavouritesState> =
         MutableLiveData<FavouritesState>(FavouritesState())
     val state: LiveData<FavouritesState>
         get() {
             return _state
+        }
+
+    private val _uiMessage: MutableLiveData<UiMessage> = MutableLiveData<UiMessage>(UiMessage())
+    val uiMessage: LiveData<UiMessage>
+        get() {
+            return _uiMessage
         }
 
     private val context = getApplication<Application>()
@@ -45,11 +55,7 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
             val repository = RecipesRepository()
             val recipes: List<Recipe>? = repository.getRecipesByIds(favouritesSet)
             if (recipes == null) {
-                Toast.makeText(
-                    context.applicationContext,
-                    "Ошибка получения данных",
-                    Toast.LENGTH_LONG
-                ).show()
+                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }
             _state.postValue(FavouritesState(recipesList = recipes))
         }

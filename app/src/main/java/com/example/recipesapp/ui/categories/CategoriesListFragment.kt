@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.example.recipesapp.databinding.FragmentListCategoriesBinding
 import com.example.recipesapp.model.Category
+import com.example.recipesapp.ui.categories.CategoriesListViewModel.UiMessage
 
 class CategoriesListFragment : Fragment() {
     private var _binding: FragmentListCategoriesBinding? = null
@@ -54,6 +56,17 @@ class CategoriesListFragment : Fragment() {
             })
         }
         categoriesListViewModel.state.observe(viewLifecycleOwner, categoriesListObserver)
+
+        val uiMessageObserver = Observer<UiMessage> {
+            if (it.message != null) {
+                Toast.makeText(
+                    binding.root.context,
+                    it.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        categoriesListViewModel.uiMessage.observe(viewLifecycleOwner, uiMessageObserver)
     }
 
     fun openRecipesByCategory(category: Category?) {
@@ -68,3 +81,4 @@ class CategoriesListFragment : Fragment() {
         )
     }
 }
+
