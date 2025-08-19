@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
@@ -15,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.recipesapp.R
 import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.RecipeState
+import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.UiMessage
 
 class RecipeFragment : Fragment() {
 
@@ -84,7 +86,7 @@ class RecipeFragment : Fragment() {
                     .placeholder(R.drawable.img_placeholder)
                     .error(R.drawable.img_error)
                     .into(binding.ivRecipeHeader)
-                
+
                 binding.favouriteButton.setOnClickListener {
                     recipeViewModel.onFavoritesClicked()
                 }
@@ -102,6 +104,17 @@ class RecipeFragment : Fragment() {
             }
         }
         recipeViewModel.state.observe(viewLifecycleOwner, recipeStateObserver)
+
+        val uiMessageObserver = Observer<UiMessage> {
+            if (it.message != null) {
+                Toast.makeText(
+                    context,
+                    it.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        recipeViewModel.uiMessage.observe(viewLifecycleOwner, uiMessageObserver)
     }
 
     fun setFavouriteIcon(isFavourite: Boolean) {

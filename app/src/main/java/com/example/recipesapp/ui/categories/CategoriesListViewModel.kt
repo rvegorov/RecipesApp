@@ -1,23 +1,23 @@
 package com.example.recipesapp.ui.categories
 
 import android.app.Application
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.example.recipesapp.R
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
-import java.util.concurrent.Executors.newFixedThreadPool
+import kotlinx.coroutines.launch
 
 class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
     data class CategoriesListState(
         var categoriesList: List<Category>? = null
     )
 
-    private val threadPool = newFixedThreadPool(4)
-
-    val context = getApplication<Application>()
+    data class UiMessage(
+        var message: String? = null
+    )
 
     private val _state: MutableLiveData<CategoriesListState> =
         MutableLiveData<CategoriesListState>(CategoriesListState())
@@ -26,18 +26,20 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
             return _state
         }
 
+    private val _uiMessage: MutableLiveData<UiMessage> = MutableLiveData<UiMessage>(UiMessage())
+    val uiMessage: LiveData<UiMessage>
+        get() {
+            return _uiMessage
+        }
+
+    val context = getApplication<Application>()
+
     fun loadCategoriesList() {
-        threadPool.execute {
+        viewModelScope.launch {
             val repository = RecipesRepository()
             val categoriesList = repository.getCategories()
-            ContextCompat.getMainExecutor(context).execute {
-                if (categoriesList == null) {
-                    Toast.makeText(
-                        context.applicationContext,
-                        "Ошибка получения данных",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+            if (categoriesList == null) {
+                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }
             _state.postValue(CategoriesListState(categoriesList = categoriesList))
         }

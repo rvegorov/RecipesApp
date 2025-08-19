@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,6 +15,7 @@ import com.example.recipesapp.databinding.FragmentListRecipesBinding
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListViewModel.RecipesListState
 import com.example.recipesapp.R
+import com.example.recipesapp.ui.recipes.recipeList.RecipesListViewModel.UiMessage
 
 class RecipesListFragment : Fragment() {
     private var _binding: FragmentListRecipesBinding? = null
@@ -70,6 +72,20 @@ class RecipesListFragment : Fragment() {
             })
         }
         recipesListViewModel.state.observe(viewLifecycleOwner, recipesListStateObserver)
+
+        val uiMessageObserver = Observer<UiMessage> {
+            if (it.message != null) {
+                Toast.makeText(
+                    context,
+                    it.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
+        recipesListViewModel.uiMessage.observe(
+            viewLifecycleOwner,
+            uiMessageObserver
+        )
     }
 
     fun openRecipeByRecipeId(recipeId: Int) {

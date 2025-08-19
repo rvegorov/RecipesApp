@@ -2,20 +2,24 @@ package com.example.recipesapp.ui.recipes.favourites
 
 import android.app.Application
 import android.content.Context.MODE_PRIVATE
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.FAVOURITES_IDS_KEY
+import com.example.recipesapp.R
 import com.example.recipesapp.SP_NAME
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
-import java.util.concurrent.Executors.newFixedThreadPool
+import kotlinx.coroutines.launch
 
 class FavouritesViewModel(application: Application) : AndroidViewModel(application) {
     data class FavouritesState(
         var recipesList: List<Recipe>? = null
+    )
+
+    data class UiMessage(
+        var message: String? = null
     )
 
     private val _state: MutableLiveData<FavouritesState> =
@@ -25,7 +29,11 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
             return _state
         }
 
-    private val threadPool = newFixedThreadPool(4)
+    private val _uiMessage: MutableLiveData<UiMessage> = MutableLiveData<UiMessage>(UiMessage())
+    val uiMessage: LiveData<UiMessage>
+        get() {
+            return _uiMessage
+        }
 
     private val context = getApplication<Application>()
 
@@ -42,18 +50,12 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun loadRecipesList() {
-        threadPool.execute {
+        viewModelScope.launch {
             val favouritesSet = getFavouritesSet().map { it.toInt() }.toSet()
             val repository = RecipesRepository()
             val recipes: List<Recipe>? = repository.getRecipesByIds(favouritesSet)
-            ContextCompat.getMainExecutor(context).execute {
-                if (recipes == null) {
-                    Toast.makeText(
-                        context.applicationContext,
-                        "Ошибка получения данных",
-                        Toast.LENGTH_LONG
-                    ).show()
-                }
+            if (recipes == null) {
+                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }
             _state.postValue(FavouritesState(recipesList = recipes))
         }

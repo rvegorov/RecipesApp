@@ -1,16 +1,16 @@
 package com.example.recipesapp.ui.recipes.recipeList
 
 import android.app.Application
-import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
+import com.example.recipesapp.R
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
-import java.util.concurrent.Executors.newFixedThreadPool
+import kotlinx.coroutines.launch
 
 class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
     data class RecipesListState(
@@ -19,26 +19,32 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
         var recipesList: List<Recipe>? = null,
     )
 
+    data class UiMessage(
+        var message: String? = null
+    )
+
     private val _state: MutableLiveData<RecipesListState> =
         MutableLiveData<RecipesListState>(RecipesListState())
     val state: LiveData<RecipesListState>
         get() {
             return _state
         }
+
+    private val _uiMessage: MutableLiveData<UiMessage> =
+        MutableLiveData<UiMessage>(UiMessage())
+    val uiMessage: LiveData<UiMessage>
+        get() {
+            return _uiMessage
+        }
+
     private val context = getApplication<Application>()
-    private val threadPool = newFixedThreadPool(4)
 
     fun loadRecipesList(category: Category) {
-        threadPool.execute {
+        viewModelScope.launch {
             val repository = RecipesRepository()
             val recipesList = repository.getRecipesByCategoryId(category.id)
-
-            ContextCompat.getMainExecutor(context).execute {
-                if (recipesList == null) {
-                    Toast.makeText(
-                        context, "Ошибка получения данных", Toast.LENGTH_LONG
-                    ).show()
-                }
+            if (recipesList == null) {
+                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }
             _state.postValue(
                 RecipesListState(
