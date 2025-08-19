@@ -6,6 +6,7 @@ plugins {
     id("kotlin-parcelize")
     id("androidx.navigation.safeargs.kotlin")
     id("org.jetbrains.kotlin.plugin.serialization")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -63,15 +64,18 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.navigation.ui)
 
-    //Serialization
+    // Serialization
     implementation(libs.kotlinx.serialization.json)
 
-    //HTTP
+    // HTTP
     implementation(libs.okhttp)
     implementation(libs.okhttp3.logging.interceptor)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
 
-    //Images
+    // Images
     implementation(libs.glide)
+
+    // Caching
+    implementation(libs.androidx.room.runtime)
 }
