@@ -52,6 +52,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
 
         viewModelScope.launch {
             val repository = RecipesRepository(application = application)
+
+            val recipeCached = repository.getRecipeByIdFromCache(id)
+            if (recipeCached != null) {
+                _state.postValue(RecipeState(recipe = recipeCached))
+            }
+
             val recipe = repository.getRecipeById(id)
             if (recipe == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))

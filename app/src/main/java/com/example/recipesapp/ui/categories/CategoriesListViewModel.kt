@@ -38,6 +38,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     fun loadCategoriesList() {
         viewModelScope.launch {
             val repository = RecipesRepository(application = application)
+
             val categoriesListCached = repository.getCategoriesFromCache()
             if (!categoriesListCached.isNullOrEmpty()) {
                 _state.postValue(CategoriesListState(categoriesList = categoriesListCached))

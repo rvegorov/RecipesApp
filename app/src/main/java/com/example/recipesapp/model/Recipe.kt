@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.Serializable
 
-@Serializable
 @Parcelize
+@Serializable
 data class Recipe(
     val id: Int,
     val title: String,

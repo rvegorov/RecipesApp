@@ -43,17 +43,28 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
     fun loadRecipesList(category: Category) {
         viewModelScope.launch {
             val repository = RecipesRepository(application)
+
+            val recipesListCached = repository.getRecipesByCategoryIdFromCache(category.id)
+            if (!recipesListCached.isNullOrEmpty()) {
+                _state.postValue(RecipesListState(recipesList = recipesListCached))
+            }
+
             val recipesList = repository.getRecipesByCategoryId(category.id)
             if (recipesList == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
-            }
-            _state.postValue(
-                RecipesListState(
-                    category = category,
-                    recipesList = recipesList,
-                    categoryImageUrl = "$API_IMG_URL${category.imageUrl}"
+            } else {
+                recipesList.forEach { recipe ->
+                    repository.addRecipe(recipe, category.id)
+                }
+
+                _state.postValue(
+                    RecipesListState(
+                        category = category,
+                        recipesList = recipesList,
+                        categoryImageUrl = "$API_IMG_URL${category.imageUrl}"
+                    )
                 )
-            )
+            }
         }
     }
 }

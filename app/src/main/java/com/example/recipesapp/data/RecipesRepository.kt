@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.example.recipesapp.API_URL
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
+import com.example.recipesapp.model.StoredRecipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -32,12 +33,20 @@ class RecipesRepository(application: Application) {
 
     val apiService: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    val database = Room.databaseBuilder(
+    val categoryDatabase = Room.databaseBuilder(
         application.applicationContext,
         Database::class.java,
         name = "database-categories"
     ).build()
-    val categoryDao = database.categoryDao()
+
+    val recipeDatabase = Room.databaseBuilder(
+        application.applicationContext,
+        Database::class.java,
+        name = "database-recipe"
+    ).build()
+
+    val categoryDao = categoryDatabase.categoryDao()
+    val recipesDao = recipeDatabase.recipesDao()
 
     suspend fun getRecipeById(recipeId: Int): Recipe? {
         return try {
@@ -45,6 +54,18 @@ class RecipesRepository(application: Application) {
                 apiService.getRecipeById(recipeId)
                     .execute()
                     .body()
+            }
+
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
+    suspend fun getRecipeByIdFromCache(recipeId: Int): Recipe? {
+        return try {
+            withContext(Dispatchers.IO) {
+                convertRecipe(recipesDao.getRecipeById(recipeId))
             }
 
         } catch (e: Exception) {
@@ -67,6 +88,18 @@ class RecipesRepository(application: Application) {
         }
     }
 
+    suspend fun getRecipesByIdsFromCache(recipesIdsSet: Set<Int>): List<Recipe>? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getRecipesByIds(recipesIdsSet)
+                    .map { convertRecipe(it) }
+            }
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return try {
             withContext(Dispatchers.IO) {
@@ -77,6 +110,26 @@ class RecipesRepository(application: Application) {
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
+        }
+    }
+
+    suspend fun getRecipesByCategoryIdFromCache(categoryId: Int): List<Recipe>? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getRecipesByCategoryId(categoryId)
+                    .map { convertRecipe(it) }
+            }
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
+    suspend fun addRecipe(recipe: Recipe, categoryId: Int) {
+        val storedRecipe = convertRecipe(recipe)
+        storedRecipe.categoryId = categoryId
+        withContext(Dispatchers.IO) {
+            recipesDao.addRecipe(storedRecipe)
         }
     }
 
@@ -107,5 +160,25 @@ class RecipesRepository(application: Application) {
         withContext(Dispatchers.IO) {
             categoryDao.addCategory(category)
         }
+    }
+
+    private fun convertRecipe(initialRecipe: StoredRecipe): Recipe {
+        return Recipe(
+            id = initialRecipe.id,
+            title = initialRecipe.title,
+            ingredients = Json.decodeFromString(initialRecipe.ingredients),
+            method = Json.decodeFromString(initialRecipe.method),
+            imageUrl = initialRecipe.imageUrl
+        )
+    }
+
+    private fun convertRecipe(initialRecipe: Recipe): StoredRecipe {
+        return StoredRecipe(
+            id = initialRecipe.id,
+            title = initialRecipe.title,
+            ingredients = Json.encodeToString(initialRecipe.ingredients),
+            method = Json.encodeToString(initialRecipe.method),
+            imageUrl = initialRecipe.imageUrl
+        )
     }
 }

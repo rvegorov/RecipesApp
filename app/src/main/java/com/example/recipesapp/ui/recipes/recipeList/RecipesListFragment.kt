@@ -48,11 +48,14 @@ class RecipesListFragment : Fragment() {
 
     fun initUI() {
         val recipesListAdapter = RecipesListAdapter(null)
+        binding.tvCategoryTitle.text = category.title
         binding.rvRecipes.adapter = recipesListAdapter
 
         val recipesListStateObserver = Observer<RecipesListState> {
             // Category UI
-            binding.tvCategoryTitle.text = it.category?.title
+            if (it.category?.title != null) {
+                binding.tvCategoryTitle.text = it.category?.title
+            }
 
             Glide.with(binding.root)
                 .load(it.categoryImageUrl)
