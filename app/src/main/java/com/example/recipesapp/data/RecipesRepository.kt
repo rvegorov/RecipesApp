@@ -6,7 +6,6 @@ import androidx.room.Room
 import com.example.recipesapp.API_URL
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
-import com.example.recipesapp.model.StoredRecipe
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -64,7 +63,7 @@ object RecipesRepository {
     suspend fun getRecipeByIdFromCache(recipeId: Int): Recipe? {
         return try {
             withContext(Dispatchers.IO) {
-                convertRecipe(recipesDao.getRecipeById(recipeId))
+                recipesDao.getRecipeById(recipeId)
             }
 
         } catch (e: Exception) {
@@ -91,7 +90,6 @@ object RecipesRepository {
         return try {
             withContext(Dispatchers.IO) {
                 recipesDao.getRecipesByIds(recipesIdsSet)
-                    .map { convertRecipe(it) }
             }
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
@@ -116,7 +114,6 @@ object RecipesRepository {
         return try {
             withContext(Dispatchers.IO) {
                 recipesDao.getRecipesByCategoryId(categoryId)
-                    .map { convertRecipe(it) }
             }
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
@@ -125,10 +122,9 @@ object RecipesRepository {
     }
 
     suspend fun addRecipe(recipe: Recipe, categoryId: Int) {
-        val storedRecipe = convertRecipe(recipe)
-        storedRecipe.categoryId = categoryId
+        recipe.categoryId = categoryId
         withContext(Dispatchers.IO) {
-            recipesDao.addRecipe(storedRecipe)
+            recipesDao.addRecipe(recipe)
         }
     }
 
@@ -159,25 +155,5 @@ object RecipesRepository {
         withContext(Dispatchers.IO) {
             categoryDao.addCategory(category)
         }
-    }
-
-    private fun convertRecipe(initialRecipe: StoredRecipe): Recipe {
-        return Recipe(
-            id = initialRecipe.id,
-            title = initialRecipe.title,
-            ingredients = Json.decodeFromString(initialRecipe.ingredients),
-            method = Json.decodeFromString(initialRecipe.method),
-            imageUrl = initialRecipe.imageUrl
-        )
-    }
-
-    private fun convertRecipe(initialRecipe: Recipe): StoredRecipe {
-        return StoredRecipe(
-            id = initialRecipe.id,
-            title = initialRecipe.title,
-            ingredients = Json.encodeToString(initialRecipe.ingredients),
-            method = Json.encodeToString(initialRecipe.method),
-            imageUrl = initialRecipe.imageUrl
-        )
     }
 }
