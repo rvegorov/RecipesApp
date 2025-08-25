@@ -5,7 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.R
@@ -53,8 +52,7 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
     fun loadRecipesList() {
         viewModelScope.launch {
             val favouritesSet = getFavouritesSet().map { it.toInt() }.toSet()
-            val repository = RecipesRepository(application = application)
-            val recipes: List<Recipe>? = repository.getRecipesByIds(favouritesSet)
+            val recipes: List<Recipe>? = RecipesRepository.getRecipesByIds(favouritesSet)
             if (recipes == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }

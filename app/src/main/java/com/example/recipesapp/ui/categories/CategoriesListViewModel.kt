@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.R
 import com.example.recipesapp.data.RecipesRepository
@@ -37,18 +36,17 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
 
     fun loadCategoriesList() {
         viewModelScope.launch {
-            val repository = RecipesRepository(application = application)
-            val categoriesListCached = repository.getCategoriesFromCache()
+            val categoriesListCached = RecipesRepository.getCategoriesFromCache()
             if (!categoriesListCached.isNullOrEmpty()) {
                 _state.postValue(CategoriesListState(categoriesList = categoriesListCached))
             }
 
-            val categoriesList = repository.getCategories()
+            val categoriesList = RecipesRepository.getCategories()
             if (categoriesList == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             } else {
                 categoriesList.forEach { category ->
-                    repository.addCategory(category)
+                    RecipesRepository.addCategory(category)
                 }
                 _state.postValue(CategoriesListState(categoriesList = categoriesList))
             }

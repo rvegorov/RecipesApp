@@ -7,7 +7,6 @@ import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.FAVOURITES_IDS_KEY
@@ -51,8 +50,12 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     fun loadRecipe(id: Int) {
 
         viewModelScope.launch {
-            val repository = RecipesRepository(application = application)
-            val recipe = repository.getRecipeById(id)
+            val recipeCached = RecipesRepository.getRecipeByIdFromCache(id)
+            if (recipeCached != null) {
+                _state.postValue(RecipeState(recipe = recipeCached))
+            }
+
+            val recipe = RecipesRepository.getRecipeById(id)
             if (recipe == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }
