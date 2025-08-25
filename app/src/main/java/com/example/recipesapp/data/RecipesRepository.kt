@@ -16,7 +16,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class RecipesRepository(application: Application) {
+object RecipesRepository {
+    lateinit var categoryDao: CategoryDao
+    lateinit var recipesDao: RecipesDao
 
     val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val client = OkHttpClient.Builder().addInterceptor(logging).build()
@@ -33,20 +35,23 @@ class RecipesRepository(application: Application) {
 
     val apiService: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    val categoryDatabase = Room.databaseBuilder(
-        application.applicationContext,
-        Database::class.java,
-        name = "database-categories"
-    ).build()
+    fun init(application: Application) {
 
-    val recipeDatabase = Room.databaseBuilder(
-        application.applicationContext,
-        Database::class.java,
-        name = "database-recipe"
-    ).build()
+        val categoryDatabase = Room.databaseBuilder(
+            application.applicationContext,
+            Database::class.java,
+            name = "database-categories"
+        ).build()
 
-    val categoryDao = categoryDatabase.categoryDao()
-    val recipesDao = recipeDatabase.recipesDao()
+        val recipeDatabase = Room.databaseBuilder(
+            application.applicationContext,
+            Database::class.java,
+            name = "database-recipe"
+        ).build()
+
+        categoryDao = categoryDatabase.categoryDao()
+        recipesDao = recipeDatabase.recipesDao()
+    }
 
     suspend fun getRecipeById(recipeId: Int): Recipe? {
         return try {
