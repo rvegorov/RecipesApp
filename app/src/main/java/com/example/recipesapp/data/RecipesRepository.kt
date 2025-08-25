@@ -37,20 +37,14 @@ object RecipesRepository {
 
     fun init(application: Application) {
 
-        val categoryDatabase = Room.databaseBuilder(
+        val database = Room.databaseBuilder(
             application.applicationContext,
             Database::class.java,
-            name = "database-categories"
+            name = "database"
         ).build()
 
-        val recipeDatabase = Room.databaseBuilder(
-            application.applicationContext,
-            Database::class.java,
-            name = "database-recipe"
-        ).build()
-
-        categoryDao = categoryDatabase.categoryDao()
-        recipesDao = recipeDatabase.recipesDao()
+        categoryDao = database.categoryDao()
+        recipesDao = database.recipesDao()
     }
 
     suspend fun getRecipeById(recipeId: Int): Recipe? {
