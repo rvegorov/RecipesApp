@@ -19,4 +19,7 @@ interface RecipesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun addRecipe(recipe: Recipe)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun addRecipeList(recipes: List<Recipe>)
 }

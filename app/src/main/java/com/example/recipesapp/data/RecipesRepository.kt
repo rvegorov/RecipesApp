@@ -128,6 +128,15 @@ object RecipesRepository {
         }
     }
 
+    suspend fun addRecipeList(recipes: List<Recipe>, categoryId: Int) {
+        recipes.forEach { recipe ->
+            recipe.categoryId = categoryId
+        }
+        withContext(Dispatchers.IO) {
+            recipesDao.addRecipeList(recipes)
+        }
+    }
+
     suspend fun getCategories(): List<Category>? {
         return try {
             withContext(Dispatchers.IO) {
