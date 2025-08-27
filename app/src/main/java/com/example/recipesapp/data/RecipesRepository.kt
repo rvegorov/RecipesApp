@@ -15,7 +15,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
-class RecipesRepository(application: Application) {
+object RecipesRepository {
+    lateinit var categoryDao: CategoryDao
+    lateinit var recipesDao: RecipesDao
 
     val logging = HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY)
     val client = OkHttpClient.Builder().addInterceptor(logging).build()
@@ -32,12 +34,17 @@ class RecipesRepository(application: Application) {
 
     val apiService: RecipeApiService = retrofit.create(RecipeApiService::class.java)
 
-    val database = Room.databaseBuilder(
-        application.applicationContext,
-        Database::class.java,
-        name = "database-categories"
-    ).build()
-    val categoryDao = database.categoryDao()
+    fun init(application: Application) {
+
+        val database = Room.databaseBuilder(
+            application.applicationContext,
+            Database::class.java,
+            name = "database"
+        ).build()
+
+        categoryDao = database.categoryDao()
+        recipesDao = database.recipesDao()
+    }
 
     suspend fun getRecipeById(recipeId: Int): Recipe? {
         return try {
@@ -45,6 +52,18 @@ class RecipesRepository(application: Application) {
                 apiService.getRecipeById(recipeId)
                     .execute()
                     .body()
+            }
+
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
+    suspend fun getRecipeByIdFromCache(recipeId: Int): Recipe? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getRecipeById(recipeId)
             }
 
         } catch (e: Exception) {
@@ -67,6 +86,17 @@ class RecipesRepository(application: Application) {
         }
     }
 
+    suspend fun getRecipesByIdsFromCache(recipesIdsSet: Set<Int>): List<Recipe>? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getRecipesByIds(recipesIdsSet)
+            }
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
     suspend fun getRecipesByCategoryId(categoryId: Int): List<Recipe>? {
         return try {
             withContext(Dispatchers.IO) {
@@ -77,6 +107,33 @@ class RecipesRepository(application: Application) {
         } catch (e: Exception) {
             Log.i("Repository", "${e.message}")
             null
+        }
+    }
+
+    suspend fun getRecipesByCategoryIdFromCache(categoryId: Int): List<Recipe>? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getRecipesByCategoryId(categoryId)
+            }
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
+    suspend fun addRecipe(recipe: Recipe, categoryId: Int) {
+        recipe.categoryId = categoryId
+        withContext(Dispatchers.IO) {
+            recipesDao.addRecipe(recipe)
+        }
+    }
+
+    suspend fun addRecipeList(recipes: List<Recipe>, categoryId: Int) {
+        recipes.forEach { recipe ->
+            recipe.categoryId = categoryId
+        }
+        withContext(Dispatchers.IO) {
+            recipesDao.addRecipeList(recipes)
         }
     }
 

@@ -4,7 +4,6 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.R
@@ -42,11 +41,25 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
 
     fun loadRecipesList(category: Category) {
         viewModelScope.launch {
-            val repository = RecipesRepository(application)
-            val recipesList = repository.getRecipesByCategoryId(category.id)
+            val recipesListCached = RecipesRepository.getRecipesByCategoryIdFromCache(category.id)
+            if (!recipesListCached.isNullOrEmpty()) {
+                _state.postValue(RecipesListState(recipesList = recipesListCached))
+            } else {
+                _state.postValue(
+                    RecipesListState(
+                        category = category,
+                        categoryImageUrl = "${API_IMG_URL}${category.imageUrl}"
+                    )
+                )
+            }
+
+            val recipesList = RecipesRepository.getRecipesByCategoryId(category.id)
             if (recipesList == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
+            } else {
+                RecipesRepository.addRecipeList(recipesList, category.id)
             }
+
             _state.postValue(
                 RecipesListState(
                     category = category,
@@ -54,6 +67,7 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                     categoryImageUrl = "$API_IMG_URL${category.imageUrl}"
                 )
             )
+
         }
     }
 }
