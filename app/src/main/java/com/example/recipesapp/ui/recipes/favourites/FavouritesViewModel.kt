@@ -1,14 +1,11 @@
 package com.example.recipesapp.ui.recipes.favourites
 
 import android.app.Application
-import android.content.Context.MODE_PRIVATE
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.R
-import com.example.recipesapp.SP_NAME
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
@@ -37,22 +34,9 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
 
     private val context = getApplication<Application>()
 
-    private fun getFavouritesSet(): Set<String> {
-        val sharedPrefs = context.getSharedPreferences(
-            SP_NAME,
-            MODE_PRIVATE
-        )
-        val favouritesSet = sharedPrefs?.getStringSet(
-            FAVOURITES_IDS_KEY,
-            setOf()
-        ) as Set<String>
-        return HashSet<String>(favouritesSet)
-    }
-
     fun loadRecipesList() {
         viewModelScope.launch {
-            val favouritesSet = getFavouritesSet().map { it.toInt() }.toSet()
-            val recipes: List<Recipe>? = RecipesRepository.getRecipesByIds(favouritesSet)
+            val recipes: List<Recipe>? = RecipesRepository.getFavouriteRecipes()
             if (recipes == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
             }

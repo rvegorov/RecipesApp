@@ -1,17 +1,13 @@
 package com.example.recipesapp.ui.recipes.recipe
 
 import android.app.Application
-import android.content.Context.MODE_PRIVATE
 import android.util.Log
-import androidx.core.content.edit
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
-import com.example.recipesapp.FAVOURITES_IDS_KEY
 import com.example.recipesapp.R
-import com.example.recipesapp.SP_NAME
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
@@ -48,7 +44,6 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun loadRecipe(id: Int) {
-
         viewModelScope.launch {
             val recipeCached = RecipesRepository.getRecipeByIdFromCache(id)
             if (recipeCached != null) {
@@ -58,43 +53,36 @@ class RecipeViewModel(application: Application) : AndroidViewModel(application) 
             val recipe = RecipesRepository.getRecipeById(id)
             if (recipe == null) {
                 _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
-            }
-            _state.value = RecipeState(
-                recipe = recipe,
-                isFavourite = getFavourites().contains(id.toString()),
-                servingsCount = state.value?.servingsCount ?: 1,
-                recipeImageUrl = "$API_IMG_URL${recipe?.imageUrl}",
-            )
-        }
-    }
+            } else {
+                val isFavourite = recipeCached?.isFavourite == true
+                val categoryId = recipeCached?.categoryId
+                recipe.isFavourite = isFavourite
+                recipe.categoryId = categoryId
 
-    fun getFavourites(): MutableSet<String> {
-        val sharedPrefs = context.getSharedPreferences(
-            SP_NAME, MODE_PRIVATE
-        )
-        val favouritesSet = sharedPrefs?.getStringSet(
-            FAVOURITES_IDS_KEY, mutableSetOf()
-        ) as MutableSet<String>
-        return HashSet<String>(favouritesSet)
+                _state.value = RecipeState(
+                    recipe = recipe,
+                    isFavourite = isFavourite,
+                    servingsCount = state.value?.servingsCount ?: 1,
+                    recipeImageUrl = "$API_IMG_URL${recipe.imageUrl}",
+                )
+            }
+        }
     }
 
     fun onFavoritesClicked() {
-        val favouritesSet = getFavourites()
-        if (favouritesSet.contains(_state.value?.recipe?.id.toString())) {
-            favouritesSet.remove(_state.value?.recipe?.id.toString())
-            _state.postValue(_state.value?.copy(isFavourite = false))
-        } else {
-            favouritesSet.add(_state.value?.recipe?.id.toString())
-            _state.postValue(_state.value?.copy(isFavourite = true))
-        }
-        saveFavourites(favouritesSet)
-    }
+        val recipe = _state.value?.recipe
+        val categoryId = recipe?.categoryId
+        if (recipe != null && categoryId != null) {
+            viewModelScope.launch {
+                if (_state.value?.isFavourite == true) {
+                    RecipesRepository.addRecipe(recipe.copy(isFavourite = false), categoryId)
+                    _state.postValue(_state.value?.copy(isFavourite = false))
+                } else {
 
-    fun saveFavourites(ids: Set<String>) {
-        val sharedPrefs = context.getSharedPreferences(SP_NAME, MODE_PRIVATE)
-        sharedPrefs?.edit {
-            putStringSet(FAVOURITES_IDS_KEY, ids)
-            apply()
+                    RecipesRepository.addRecipe(recipe.copy(isFavourite = true), categoryId)
+                    _state.postValue(_state.value?.copy(isFavourite = true))
+                }
+            }
         }
     }
 
