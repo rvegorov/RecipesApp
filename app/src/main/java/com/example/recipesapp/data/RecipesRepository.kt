@@ -121,6 +121,28 @@ object RecipesRepository {
         }
     }
 
+    suspend fun getFavouriteRecipes(): List<Recipe>? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getFavouriteRecipes()
+            }
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
+    suspend fun getFavouriteIds(): List<Int>? {
+        return try {
+            withContext(Dispatchers.IO) {
+                recipesDao.getFavouriteIds()
+            }
+        } catch (e: Exception) {
+            Log.i("Repository", "${e.message}")
+            null
+        }
+    }
+
     suspend fun addRecipe(recipe: Recipe, categoryId: Int) {
         recipe.categoryId = categoryId
         withContext(Dispatchers.IO) {
@@ -128,8 +150,11 @@ object RecipesRepository {
         }
     }
 
-    suspend fun addRecipeList(recipes: List<Recipe>, categoryId: Int) {
+    suspend fun addRecipeList(recipes: List<Recipe>, categoryId: Int, favouritesList: List<Int>?) {
         recipes.forEach { recipe ->
+            if (favouritesList?.contains(recipe.id) == true) {
+                recipe.isFavourite = true
+            }
             recipe.categoryId = categoryId
         }
         withContext(Dispatchers.IO) {
