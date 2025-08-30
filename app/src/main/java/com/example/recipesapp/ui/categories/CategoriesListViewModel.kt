@@ -1,16 +1,14 @@
 package com.example.recipesapp.ui.categories
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipesapp.R
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
 import kotlinx.coroutines.launch
 
-class CategoriesListViewModel(application: Application) : AndroidViewModel(application) {
+class CategoriesListViewModel(val repository: RecipesRepository) : ViewModel() {
     data class CategoriesListState(
         var categoriesList: List<Category>? = null
     )
@@ -18,6 +16,7 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
     data class UiMessage(
         var message: String? = null
     )
+
 
     private val _state: MutableLiveData<CategoriesListState> =
         MutableLiveData<CategoriesListState>(CategoriesListState())
@@ -32,21 +31,21 @@ class CategoriesListViewModel(application: Application) : AndroidViewModel(appli
             return _uiMessage
         }
 
-    val context = getApplication<Application>()
 
     fun loadCategoriesList() {
         viewModelScope.launch {
-            val categoriesListCached = RecipesRepository.getCategoriesFromCache()
+            val categoriesListCached = repository.getCategoriesFromCache()
             if (!categoriesListCached.isNullOrEmpty()) {
                 _state.postValue(CategoriesListState(categoriesList = categoriesListCached))
             }
 
-            val categoriesList = RecipesRepository.getCategories()
+            val categoriesList = repository.getCategories()
             if (categoriesList == null) {
-                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
+                _uiMessage.value = UiMessage(message = repository.dataErrorText)
+                _uiMessage.value = UiMessage(message = repository.dataErrorText)
             } else {
                 categoriesList.forEach { category ->
-                    RecipesRepository.addCategory(category)
+                    repository.addCategory(category)
                 }
                 _state.postValue(CategoriesListState(categoriesList = categoriesList))
             }

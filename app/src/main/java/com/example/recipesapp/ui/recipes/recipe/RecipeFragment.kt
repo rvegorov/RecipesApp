@@ -10,11 +10,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.recipesapp.databinding.FragmentRecipeBinding
 import com.google.android.material.divider.MaterialDividerItemDecoration
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.recipesapp.R
+import com.example.recipesapp.RecipesApplication
 import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.RecipeState
 import com.example.recipesapp.ui.recipes.recipe.RecipeViewModel.UiMessage
 
@@ -25,10 +25,17 @@ class RecipeFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentRecipeBinding must not to be null")
 
-    private val recipeViewModel: RecipeViewModel by viewModels()
+    private lateinit var recipeViewModel: RecipeViewModel
 
     private val recipeArgs: RecipeFragmentArgs by navArgs()
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        recipeViewModel = appContainer.recipeViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
