@@ -6,9 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 import kotlinx.coroutines.launch
 
-class FavouritesViewModel(val repository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class FavouritesViewModel @Inject constructor(val repository: RecipesRepository) : ViewModel() {
     data class FavouritesState(
         var recipesList: List<Recipe>? = null
     )

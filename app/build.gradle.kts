@@ -7,6 +7,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("org.jetbrains.kotlin.plugin.serialization")
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -79,4 +80,8 @@ dependencies {
     // Caching
     implementation(libs.androidx.room.runtime)
     ksp(libs.androidx.room.compiler)
+
+    // DI (Hilt)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
 }

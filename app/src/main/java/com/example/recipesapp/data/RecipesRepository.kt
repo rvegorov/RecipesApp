@@ -5,14 +5,16 @@ import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-class RecipesRepository(
+class RecipesRepository @Inject constructor(
     val categoryDao: CategoryDao,
     val recipesDao: RecipesDao,
     val apiService: RecipeApiService,
-    val ioDispatcher: CoroutineContext,
 ) {
+
+    val ioDispatcher: CoroutineContext = Dispatchers.IO
 
     val dataErrorText = "Ошибка получения данных"
 

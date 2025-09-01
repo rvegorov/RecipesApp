@@ -8,9 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipeViewModel(val repository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipeViewModel @Inject constructor(val repository: RecipesRepository) : ViewModel() {
     data class RecipeState(
         var recipe: Recipe? = null,
         var isFavourite: Boolean = false,
