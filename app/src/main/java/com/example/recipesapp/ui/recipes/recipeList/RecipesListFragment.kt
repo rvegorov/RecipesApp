@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,6 +14,7 @@ import com.example.recipesapp.databinding.FragmentListRecipesBinding
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListViewModel.RecipesListState
 import com.example.recipesapp.R
+import com.example.recipesapp.RecipesApplication
 import com.example.recipesapp.ui.recipes.recipeList.RecipesListViewModel.UiMessage
 
 class RecipesListFragment : Fragment() {
@@ -23,8 +23,16 @@ class RecipesListFragment : Fragment() {
         get() = _binding
             ?: throw IllegalStateException("Binding for FragmentListRecipesBinding must not to be null")
     private lateinit var category: Category
-    private val recipesListViewModel: RecipesListViewModel by viewModels()
+
+    private lateinit var recipesListViewModel: RecipesListViewModel
     private val recipeListArgs: RecipesListFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val appContainer = (requireActivity().application as RecipesApplication).appContainer
+        recipesListViewModel = appContainer.recipesListViewModelFactory.create()
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

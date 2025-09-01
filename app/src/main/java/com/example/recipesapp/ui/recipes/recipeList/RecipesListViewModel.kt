@@ -1,18 +1,16 @@
 package com.example.recipesapp.ui.recipes.recipeList
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.API_IMG_URL
-import com.example.recipesapp.R
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class RecipesListViewModel(application: Application) : AndroidViewModel(application) {
+class RecipesListViewModel(val repository: RecipesRepository) : ViewModel() {
     data class RecipesListState(
         var category: Category? = null,
         var categoryImageUrl: String? = null,
@@ -37,11 +35,10 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
             return _uiMessage
         }
 
-    private val context = getApplication<Application>()
 
     fun loadRecipesList(category: Category) {
         viewModelScope.launch {
-            val recipesListCached = RecipesRepository.getRecipesByCategoryIdFromCache(category.id)
+            val recipesListCached = repository.getRecipesByCategoryIdFromCache(category.id)
             if (!recipesListCached.isNullOrEmpty()) {
                 _state.postValue(RecipesListState(recipesList = recipesListCached))
             } else {
@@ -53,11 +50,12 @@ class RecipesListViewModel(application: Application) : AndroidViewModel(applicat
                 )
             }
 
-            val recipesList = RecipesRepository.getRecipesByCategoryId(category.id)
+            val recipesList = repository.getRecipesByCategoryId(category.id)
+            val favouritesList = repository.getFavouriteIds()
             if (recipesList == null) {
-                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
+                _uiMessage.value = UiMessage(message = repository.dataErrorText)
             } else {
-                RecipesRepository.addRecipeList(recipesList, category.id)
+                repository.addRecipeList(recipesList, category.id, favouritesList)
             }
 
             _state.postValue(

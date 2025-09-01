@@ -1,16 +1,14 @@
 package com.example.recipesapp.ui.recipes.favourites
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.recipesapp.R
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Recipe
 import kotlinx.coroutines.launch
 
-class FavouritesViewModel(application: Application) : AndroidViewModel(application) {
+class FavouritesViewModel(val repository: RecipesRepository) : ViewModel() {
     data class FavouritesState(
         var recipesList: List<Recipe>? = null
     )
@@ -32,13 +30,11 @@ class FavouritesViewModel(application: Application) : AndroidViewModel(applicati
             return _uiMessage
         }
 
-    private val context = getApplication<Application>()
-
     fun loadRecipesList() {
         viewModelScope.launch {
-            val recipes: List<Recipe>? = RecipesRepository.getFavouriteRecipes()
+            val recipes: List<Recipe>? = repository.getFavouriteRecipes()
             if (recipes == null) {
-                _uiMessage.value = UiMessage(message = context.getString(R.string.dataError))
+                _uiMessage.value = UiMessage(message = repository.dataErrorText)
             }
             _state.postValue(FavouritesState(recipesList = recipes))
         }
