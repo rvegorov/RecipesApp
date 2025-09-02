@@ -18,6 +18,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -31,6 +32,7 @@ class RecipeModule() {
         ).build()
     }
 
+    @Singleton
     @Provides
     fun provideCategoryDao(database: Database): CategoryDao {
         return database.categoryDao()
@@ -47,6 +49,7 @@ class RecipeModule() {
         return OkHttpClient.Builder().addInterceptor(logging).build()
     }
 
+    @Singleton
     @Provides
     fun provideRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
