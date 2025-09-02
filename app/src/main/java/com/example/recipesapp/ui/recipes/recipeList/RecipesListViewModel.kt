@@ -8,9 +8,12 @@ import com.example.recipesapp.API_IMG_URL
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
 import com.example.recipesapp.model.Recipe
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecipesListViewModel(val repository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class RecipesListViewModel @Inject constructor(val repository: RecipesRepository) : ViewModel() {
     data class RecipesListState(
         var category: Category? = null,
         var categoryImageUrl: String? = null,

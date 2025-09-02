@@ -6,9 +6,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.recipesapp.data.RecipesRepository
 import com.example.recipesapp.model.Category
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CategoriesListViewModel(val repository: RecipesRepository) : ViewModel() {
+@HiltViewModel
+class CategoriesListViewModel @Inject constructor(
+    val repository: RecipesRepository
+) : ViewModel() {
     data class CategoriesListState(
         var categoriesList: List<Category>? = null
     )
